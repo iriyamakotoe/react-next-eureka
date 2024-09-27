@@ -1,6 +1,7 @@
 'use client'
 
-import React, {useState, useEffect} from 'react'
+import {supabase} from '@/utils/supabase'
+import {useState, useEffect} from 'react'
 import {Header} from '@/components/Header'
 
 const Home = () => {
@@ -14,7 +15,19 @@ const Home = () => {
 
 	const fetchStudents = async () => {
 		try {
-			const res = await fetch(`/api/students`)
+			const {data: sessionData} = await supabase.auth.getSession()
+			const token = sessionData?.session?.access_token
+
+			if (!token) {
+				throw new Error('ユーザーがログインしていません')
+			}
+
+			const res = await fetch('/api/students', {
+				method: 'GET',
+				headers: {
+					Authorization: `Bearer ${token}`,
+				},
+			})
 			if (!res.ok) {
 				throw new Error('データの取得に失敗しました')
 			}
@@ -36,7 +49,7 @@ const Home = () => {
 			<main>
 				<h2>生徒一覧</h2>
 				<p>
-					<a href="students/">新規生徒登録</a>
+					<a href="students/create">新規生徒登録</a>
 				</p>
 				{students.map((student) => (
 					<section key={student.id}>

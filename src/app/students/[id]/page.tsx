@@ -70,18 +70,21 @@ const EditStudent = ({params}) => {
 	}
 
 	const handleDelete = async () => {
-		const res = await fetch(`/api/students/${id}`, {
-			method: 'DELETE',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(),
-		})
-		if (res.ok) {
-			router.push('/')
-		} else {
-			const data = await res.json()
-			setErrorMessage(data.message)
+		const confirmDelete = window.confirm('本当に削除しますか？この操作は元に戻せません。')
+		if (confirmDelete) {
+			const res = await fetch(`/api/students/${id}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(),
+			})
+			if (res.ok) {
+				router.push('/')
+			} else {
+				const data = await res.json()
+				setErrorMessage(data.message)
+			}
 		}
 	}
 

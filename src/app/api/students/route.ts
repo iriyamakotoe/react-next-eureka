@@ -1,5 +1,31 @@
 import {supabase} from '@/utils/supabase'
 
+export async function GET(req) {
+	const accessToken = req.headers.get('Authorization')?.replace('Bearer ', '')
+
+	if (!accessToken) {
+		return new Response(JSON.stringify({error: 'Unauthorized'}), {status: 401})
+	}
+
+	// サーバーサイドでSupabaseユーザーを取得
+	const {
+		data: {user},
+		error: authError,
+	} = await supabase.auth.getUser(accessToken)
+
+	if (authError || !user) {
+		return new Response(JSON.stringify({error: 'User not authenticated'}), {status: 401})
+	}
+
+	const {data, error} = await supabase.from('students').select('*')
+
+	if (error) {
+		return new Response(JSON.stringify({error: error.message}), {status: 500})
+	}
+
+	return new Response(JSON.stringify(data), {status: 200})
+}
+
 export async function POST(req) {
 	const {name, school, grade, note} = await req.json()
 
@@ -15,14 +41,4 @@ export async function POST(req) {
 	}
 
 	return new Response(JSON.stringify({message: 'Student added successfully'}), {status: 200})
-}
-
-export async function GET() {
-	const {data, error} = await supabase.from('students').select('*')
-
-	if (error) {
-		return new Response(JSON.stringify({error: error.message}), {status: 500})
-	}
-
-	return new Response(JSON.stringify(data), {status: 200})
 }

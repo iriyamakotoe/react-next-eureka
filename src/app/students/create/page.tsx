@@ -1,16 +1,12 @@
 'use client'
 
 import React, {useState} from 'react'
-// import {useCookies} from 'react-cookie'
 import {useForm} from 'react-hook-form'
 import {Header} from '@/components/Header'
 import {InputItem} from '@/components/InputItem'
 import {TextAreaItem} from '@/components/TextAreaItem'
-// import './newreview.scss'
 
 const NewStudent = () => {
-	// const [cookies, ,] = useCookies()
-
 	const defaultValues = {
 		name: '',
 		school: '',
