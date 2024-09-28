@@ -25,6 +25,11 @@ textarea {
 	background: #eee;
 }
 
+h2.pageTitle {
+	font-size: 1.6em;
+	margin-bottom: 0.5em;
+}
+
 @layer utilities {
 	.text-balance {
 		text-wrap: balance;

@@ -23,7 +23,7 @@ export const Header = () => {
 
 	return (
 		<>
-			<header className="header">
+			<header className="flex justify-between p-5">
 				<h1>ユリイカ学習塾</h1>
 				<p>
 					<button onClick={handleLogout}>ログアウト</button>
