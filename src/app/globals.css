@@ -35,3 +35,10 @@ h2.pageTitle {
 		text-wrap: balance;
 	}
 }
+
+@media print {
+	button {
+		display: none; /* 印刷時にボタンを非表示 */
+	}
+	/* その他の印刷スタイル */
+}

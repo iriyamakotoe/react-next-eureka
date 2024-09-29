@@ -7,6 +7,7 @@ export const Semester = (props) => {
 	const register = props.register
 	const scores = props.scores
 	const semster = props.semster
+	console.log(scores, semster)
 	return (
 		<>
 			<section>

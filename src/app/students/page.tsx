@@ -80,10 +80,10 @@ const Students = () => {
 			body: JSON.stringify({
 				student_id: id,
 				year: year,
-				score1: null,
-				score2: null,
-				score3: null,
-				comments: '',
+				sem1: {mid: '', end: ''},
+				sem2: {mid: '', end: ''},
+				sem3: {mid: '', end: ''},
+				comments: null,
 			}),
 		})
 		if (res.ok) {
