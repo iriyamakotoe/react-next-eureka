@@ -6,91 +6,126 @@ import {InputItem} from '@/components/InputItem'
 export const Semester = (props) => {
 	const register = props.register
 	const scores = props.scores
-	const semster = props.semster
-	console.log(scores, semster)
+	const semester = props.semester
+
 	return (
 		<>
-			<section>
-				<h3>国語</h3>
-				<InputItem
-					register={register}
-					type="number"
-					id={semster + '_mid_japanese'}
-					label="中間"
-					defaultValues={scores[semster].mid.japanese}
-				/>
-				<InputItem
-					register={register}
-					type="number"
-					id={semster + '_end_japanese'}
-					label="期末"
-					defaultValues={scores[semster].end.japanese}
-				/>
-
-				<h3>数学</h3>
-				<InputItem
-					register={register}
-					type="number"
-					id={semster + '_mid_arithmetic'}
-					label="中間"
-					defaultValues={scores[semster].mid.arithmetic}
-				/>
-				<InputItem
-					register={register}
-					type="number"
-					id={semster + '_end_arithmetic'}
-					label="期末"
-					defaultValues={scores[semster].end.arithmetic}
-				/>
-
-				<h3>英語</h3>
-				<InputItem
-					register={register}
-					type="number"
-					id={semster + '_mid_english'}
-					label="中間"
-					defaultValues={scores[semster].mid.english}
-				/>
-				<InputItem
-					register={register}
-					type="number"
-					id={semster + '_end_english'}
-					label="期末"
-					defaultValues={scores[semster].end.english}
-				/>
-
-				<h3>社会</h3>
-				<InputItem
-					register={register}
-					type="number"
-					id={semster + '_mid_social'}
-					label="中間"
-					defaultValues={scores[semster].mid.social}
-				/>
-				<InputItem
-					register={register}
-					type="number"
-					id={semster + '_end_social'}
-					label="期末"
-					defaultValues={scores[semster].end.social}
-				/>
-
-				<h3>理科</h3>
-				<InputItem
-					register={register}
-					type="number"
-					id={semster + '_mid_science'}
-					label="中間"
-					defaultValues={scores[semster].mid.science}
-				/>
-				<InputItem
-					register={register}
-					type="number"
-					id={semster + '_end_science'}
-					label="期末"
-					defaultValues={scores[semster].end.science}
-				/>
-			</section>
+			<dl className="flex items-center justify-around max-w-80 mx-auto mb-5">
+				<dt className="font-bold mr-2">国語</dt>
+				<dd>
+					<InputItem
+						register={register}
+						type="number"
+						id={semester + '_mid_japanese'}
+						placeholder="中間"
+						suffix="点"
+						defaultValues={scores[semester]?.mid?.japanese}
+					/>
+				</dd>
+				<dd>
+					<InputItem
+						register={register}
+						type="number"
+						id={semester + '_end_japanese'}
+						placeholder="期末"
+						suffix="点"
+						defaultValues={scores[semester]?.end?.japanese}
+					/>
+				</dd>
+			</dl>
+			<dl className="flex items-center justify-around max-w-80 mx-auto mb-5">
+				<dt className="font-bold mr-2">数学</dt>
+				<dd>
+					<InputItem
+						register={register}
+						type="number"
+						id={semester + '_mid_arithmetic'}
+						placeholder="中間"
+						suffix="点"
+						defaultValues={scores[semester]?.mid?.arithmetic}
+					/>
+				</dd>
+				<dd>
+					<InputItem
+						register={register}
+						type="number"
+						id={semester + '_end_arithmetic'}
+						placeholder="期末"
+						suffix="点"
+						suffix="点"
+						defaultValues={scores[semester]?.end?.arithmetic}
+					/>
+				</dd>
+			</dl>
+			<dl className="flex items-center justify-around max-w-80 mx-auto mb-5">
+				<dt className="font-bold mr-2">英語</dt>
+				<dd>
+					<InputItem
+						register={register}
+						type="number"
+						id={semester + '_mid_english'}
+						placeholder="中間"
+						suffix="点"
+						defaultValues={scores[semester]?.mid?.english}
+					/>
+				</dd>
+				<dd>
+					<InputItem
+						register={register}
+						type="number"
+						id={semester + '_end_english'}
+						placeholder="期末"
+						suffix="点"
+						defaultValues={scores[semester]?.end?.english}
+					/>
+				</dd>
+			</dl>
+			<dl className="flex items-center justify-around max-w-80 mx-auto mb-5">
+				<dt className="font-bold mr-2">社会</dt>
+				<dd>
+					<InputItem
+						register={register}
+						type="number"
+						id={semester + '_mid_social'}
+						placeholder="中間"
+						suffix="点"
+						defaultValues={scores[semester]?.mid?.social}
+					/>
+				</dd>
+				<dd>
+					<InputItem
+						register={register}
+						type="number"
+						id={semester + '_end_social'}
+						placeholder="期末"
+						suffix="点"
+						defaultValues={scores[semester]?.end?.social}
+					/>
+				</dd>
+			</dl>
+			<dl className="flex items-center justify-around max-w-80 mx-auto mb-5">
+				<dt className="font-bold mr-2">理科</dt>
+				<dd>
+					<InputItem
+						register={register}
+						type="number"
+						id={semester + '_mid_science'}
+						placeholder="中間"
+						suffix="点"
+						defaultValues={scores[semester]?.mid?.science}
+					/>
+				</dd>
+				<dd>
+					<InputItem
+						register={register}
+						type="number"
+						id={semester + '_end_science'}
+						placeholder="期末"
+						suffix="点"
+						defaultValues={scores[semester]?.end?.science}
+					/>
+				</dd>
+			</dl>
 		</>
 	)
 }

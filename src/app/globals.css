@@ -16,18 +16,46 @@
 
 body {
 	color: var(--foreground);
-	background: var(--background);
+	background: #557ea7;
 	font-family: Arial, Helvetica, sans-serif;
 }
-
-input,
+button {
+	margin: 0 0.5em;
+}
+/* input,
 textarea {
 	background: #eee;
+	width: 100%;
+} */
+input[type='number'] {
+	width: auto;
+	width: 5em !important;
 }
-
+.loginForm input {
+	width: 100%;
+}
+.loginForm .suffix {
+	display: none;
+}
+.scoresForm dl p {
+	margin-bottom: 0;
+}
 h2.pageTitle {
-	font-size: 1.6em;
-	margin-bottom: 0.5em;
+	font-size: 1.5em;
+	margin-bottom: 0.6em;
+	color: white;
+	text-align: center;
+	letter-spacing: 1px;
+	letter-spacing: 2.75px;
+	text-shadow: 0 0 35px #557ea7;
+	background: url(./assets/img/student.svg) top center no-repeat;
+	padding-top: 1.5em;
+}
+.tab-pane {
+	display: none;
+}
+.tab-pane.block {
+	display: block;
 }
 
 @layer utilities {

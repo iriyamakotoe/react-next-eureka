@@ -14,11 +14,19 @@ export const TextAreaItem = (props) => {
 			})
 	return (
 		<>
-			<p className="mt-10">
-				<label htmlFor={id}>{props.label}：</label>
-				<textarea id={id} rows="5" cols="33" defaultValue={props.defaultValues} {...registerOptions} />
-				<br />
-				<span className="error">{props.errors?.message}</span>
+			<p className="mb-5">
+				<label htmlFor={id} className="text-sm text-gray-700 block mb-1 font-medium">
+					{props.label}
+				</label>
+				<textarea
+					id={id}
+					rows="5"
+					cols="33"
+					defaultValue={props.defaultValues}
+					{...registerOptions}
+					className="w-full bg-gray-100 rounded border border-gray-200 py-1 px-3 block focus:ring-blue-500 focus:border-blue-500 text-gray-700"
+				/>
+				<span className="text-sm text-red-600">{props.errors?.message}</span>
 			</p>
 		</>
 	)

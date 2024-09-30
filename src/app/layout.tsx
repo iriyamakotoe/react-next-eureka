@@ -1,6 +1,18 @@
 import type {Metadata} from 'next'
 import localFont from 'next/font/local'
+import {Noto_Sans} from 'next/font/google'
+import {Plus_Jakarta_Sans} from 'next/font/google'
 import './globals.css'
+
+// Noto Sans フォントのインスタンスを作成
+const notoSans = Noto_Sans({
+	weight: ['400', '500', '600', '700'],
+	subsets: ['latin'],
+})
+const plusJakartaSans = Plus_Jakarta_Sans({
+	weight: ['400', '700'],
+	subsets: ['latin'],
+})
 
 const geistSans = localFont({
 	src: './fonts/GeistVF.woff',
@@ -25,7 +37,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="ja">
-			<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+			<body className={`${geistSans.variable} ${geistMono.variable} ${notoSans.className} antialiased min-h-screen`}>
+				{children}
+			</body>
 		</html>
 	)
 }

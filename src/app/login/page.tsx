@@ -3,53 +3,95 @@
 import {supabase} from '@/utils/supabase'
 import {useState} from 'react'
 import {useRouter} from 'next/navigation'
+import {useForm} from 'react-hook-form'
 import {Header} from '@/components/Header'
+import {Footer} from '@/components/Footer'
+import {InputItem} from '@/components/InputItem'
+import {ButtonItem} from '@/components/ButtonItem'
+import {errorForm} from '@/components/errorForm'
 
 const Login = () => {
-	const [email, setEmail] = useState('')
-	const [password, setPassword] = useState('')
-	const [error, setError] = useState(null)
+	const [errorForm, setErrorForm] = useState({flag: false, message: ''})
 	const router = useRouter()
 
-	const handleLogin = async () => {
+	const {
+		register,
+		handleSubmit,
+		formState: {errors},
+	} = useForm({mode: 'all'})
+
+	const handleLogin = async (formData) => {
+		console.log(formData)
+
 		const {data, error} = await supabase.auth.signInWithPassword({
-			email,
-			password,
+			email: formData.email,
+			password: formData.password,
 		})
 
 		if (error) {
 			switch (error.code) {
 				case 'invalid_credentials':
-					setError('メールアドレスまたはパスワードが間違っています。')
+					setErrorForm(() => ({
+						flag: true,
+						message: 'メールアドレスまたはパスワードが間違っています。',
+					}))
+					setTimeout(() => {
+						setErrorForm(() => ({
+							flag: false,
+							message: '',
+						}))
+					}, 4000)
 					break
 				default:
-					setError('ログイン中にエラーが発生しました。')
+					setErrorForm(() => ({
+						flag: true,
+						message: 'ログイン中にエラーが発生しました。',
+					}))
+					setTimeout(() => {
+						setErrorForm(() => ({
+							flag: false,
+							message: '',
+						}))
+					}, 4000)
 					break
 			}
 			return
 		}
 
-		router.push('/')
+		router.push('/students')
 	}
 
 	return (
 		<>
 			<Header />
-			<main>
-				<h2>ログイン</h2>
-				<section>
-					<p>
-						<input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-					</p>
-					<p>
-						<input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
-					</p>
-					<p>
-						<button onClick={handleLogin}>Login</button>
-					</p>
-					{error && <p>{error}</p>}
+			<main className="mainWrapper pl-5 pr-5 pb-10">
+				<h2 className="pageTitle">ログイン</h2>
+				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
+					<form onSubmit={handleSubmit(handleLogin)} noValidate="novalidate" className="loginForm max-w-80 mx-auto">
+						<InputItem
+							register={register}
+							type="email"
+							id="email"
+							pattern={{}}
+							errors={errors.email}
+							placeholder="メールアドレス"
+						/>
+						<InputItem
+							register={register}
+							type="password"
+							id="password"
+							pattern={{}}
+							errors={errors.password}
+							placeholder="パスワード"
+						/>
+						{errorForm.flag && <ErrorForm message={errorForm.message} />}
+						<p className="flex justify-center mt-10">
+							<ButtonItem type="submit" text="ログイン" style="primary" />
+						</p>
+					</form>
 				</section>
 			</main>
+			<Footer />
 		</>
 	)
 }

@@ -4,12 +4,17 @@ import {supabase} from '@/utils/supabase'
 import {useState, useEffect} from 'react'
 import {useRouter} from 'next/navigation'
 import {Header} from '@/components/Header'
+import {Footer} from '@/components/Footer'
+import {Loading} from '@/components/Loading'
+import {ButtonItem} from '@/components/ButtonItem'
+import {ErrorForm} from '@/components/ErrorForm'
 
 const Students = () => {
 	const [students, setStudents] = useState(null)
 	const [selectedYear, setSelectedYear] = useState('2024')
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(null)
+	const [errorForm, setErrorForm] = useState({flag: false, message: ''})
 	const router = useRouter()
 
 	useEffect(() => {
@@ -55,8 +60,6 @@ const Students = () => {
 		setSelectedYear(e.target.value)
 	}
 
-	const [errorMessage, setErrorMessage] = useState('')
-
 	const fetchScore = async (id, year) => {
 		const res = await fetch(`/api/students/${id}/${year}/scores`, {
 			method: 'GET',
@@ -90,63 +93,73 @@ const Students = () => {
 			router.push(`/students/${id}/${year}/scores`)
 		} else {
 			const data = await res.json()
-			setErrorMessage(data.message)
+			setErrorForm(() => ({
+				flag: true,
+				message: data.message,
+			}))
+			setTimeout(() => {
+				setErrorForm(() => ({
+					flag: false,
+					message: '',
+				}))
+			}, 4000)
 			return
 		}
 	}
 
-	if (loading) return <p>読み込み中...</p>
-	if (error) return <p>エラーが発生しました: {error}</p>
+	if (loading) return <Loading />
+	if (error) return <ErrorFetch message={error} />
 
 	return (
 		<>
 			<Header />
-			<main className="p-5">
+			<main className="mainWrapper pl-5 pr-5 pb-10">
 				<h2 className="pageTitle">生徒一覧</h2>
-				<button
-					onClick={createStudent}
-					type="button"
-					class="inline-flex items-center justify-center px-4 py-2 text-sm font-medium tracking-wide text-white transition-colors duration-200 bg-blue-600 rounded-md hover:bg-blue-700 focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 focus:shadow-outline focus:outline-none"
-				>
-					新規生徒登録
-				</button>
+				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
+					<div className="grid grid-flow-col text-center text-gray-500 bg-gray-100 rounded-lg p-3 mb-5">
+						<p className="flex justify-center">
+							<ButtonItem type="button" text="新規生徒登録" onClick={createStudent} style="primary" />
+						</p>
+					</div>
 
-				{students.map((student) => (
-					<section key={student.id}>
-						<div class="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full">
-							<div class="p-7">
-								<div className="flex justify-between">
-									<h2 class="mb-2 text-lg font-bold leading-none tracking-tight">{student.name}</h2>
-									<button
-										onClick={() => editStudent(student.id)}
-										class="inline-flex items-center justify-center h-10 px-4 py-2 text-sm font-medium text-white transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-neutral-950 hover:bg-neutral-950/90"
-									>
-										編集
-									</button>
+					{students.map((student) => (
+						<section key={student.id}>
+							<div class="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5">
+								<div class="p-5">
+									<div className="flex justify-between">
+										<h3 class="mb-2 text-lg font-bold tracking-tight">{student.name}</h3>
+										<ButtonItem type="button" text="編集" onClick={() => editStudent(student.id)} />
+									</div>
+									<p class="mb-5 text-neutral-500">
+										{student.school}　{student.grade}年生
+										<br />
+										{student.note}
+									</p>
+									<p>
+										<select
+											name="year"
+											id="year"
+											value={selectedYear}
+											onChange={handleSelect}
+											className="rounded py-1 px-3 mr-3 inline-block focus:ring-blue-500 focus:border-blue-500 text-gray-700"
+										>
+											<option value="2024">2024</option>
+										</select>
+										<ButtonItem type="button" text="成績登録" onClick={() => fetchScore(student.id, selectedYear)} />
+									</p>
+									{errorForm.flag && <ErrorForm message={errorForm.message} />}
 								</div>
-								<p class="mb-5 text-neutral-500">
-									{student.school}　{student.grade}年生
-									<br />
-									{student.note}
-								</p>
-								<p>
-									成績
-									<select name="year" id="year" value={selectedYear} onChange={handleSelect}>
-										<option value="2024">2024</option>
-									</select>
-									<button
-										onClick={() => fetchScore(student.id, selectedYear)}
-										class="inline-flex items-center justify-center h-10 px-4 py-2 text-sm font-medium text-white transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none bg-neutral-950 hover:bg-neutral-950/90"
-									>
-										登録
-									</button>
-								</p>
-								<p className="error form-error text-center">{errorMessage}</p>
 							</div>
-						</div>
-					</section>
-				))}
+						</section>
+					))}
+					<div className="grid grid-flow-col text-center text-gray-500 bg-gray-100 rounded-lg p-3 mb-5">
+						<p className="flex justify-center">
+							<ButtonItem type="button" text="新規生徒登録" onClick={createStudent} style="primary" />
+						</p>
+					</div>
+				</section>
 			</main>
+			<Footer />
 		</>
 	)
 }

@@ -4,14 +4,23 @@ import React, {useState, useEffect} from 'react'
 import {useRouter} from 'next/navigation'
 import {useForm} from 'react-hook-form'
 import {Header} from '@/components/Header'
+import {Footer} from '@/components/Footer'
+import {Loading} from '@/components/Loading'
 import {Semester} from '@/components/Semester'
 import {TextAreaItem} from '@/components/TextAreaItem'
+import {ButtonItem} from '@/components/ButtonItem'
+import {ErrorFetch} from '@/components/ErrorFetch'
+import {ErrorForm} from '@/components/ErrorForm'
+import {SuccessForm} from '@/components/SuccessForm'
 
 const Scores = ({params}) => {
 	const [scores, setScores] = useState(null)
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(null)
+	const [errorForm, setErrorForm] = useState({flag: false, message: ''})
+	const [successForm, setSuccessForm] = useState(false)
 	const router = useRouter()
+	const [activeTab, setActiveTab] = useState(0)
 
 	const {year, id} = params
 
@@ -19,11 +28,9 @@ const Scores = ({params}) => {
 		if (!scores) {
 			fetchScores()
 		}
-		console.log(scores)
 	}, [scores])
 
 	const fetchScores = async () => {
-		console.log('Fetching scores for year:', year) // year の値を確認
 		try {
 			const res = await fetch(`/api/students/${id}/${year}/scores`)
 			if (!res.ok) {
@@ -38,17 +45,19 @@ const Scores = ({params}) => {
 		}
 	}
 
+	const tabs = [
+		{id: 0, title: '一学期', semester: 'sem1'},
+		{id: 1, title: '二学期', semester: 'sem2'},
+		{id: 2, title: '三学期', semester: 'sem3'},
+		{id: 3, title: 'コメント'},
+	]
 	const {
 		register,
 		handleSubmit,
 		formState: {errors},
 	} = useForm({mode: 'all'})
 
-	const [errorMessage, setErrorMessage] = useState('')
-	const [successMessage, setSuccessMessage] = useState(false)
-
 	const onSubmit = async (data) => {
-		setErrorMessage('')
 		console.log(data)
 
 		const formatData = () => {
@@ -86,7 +95,6 @@ const Scores = ({params}) => {
 		}
 		const formattedData = formatData(data)
 
-		console.log(formattedData)
 		await fetch(`/api/students/${id}/${year}/scores`, {
 			method: 'PUT',
 			headers: {
@@ -103,70 +111,93 @@ const Scores = ({params}) => {
 		})
 			.then(async (res) => {
 				if (res.ok) {
-					setSuccessMessage(true)
+					setSuccessForm(true)
 					setTimeout(() => {
-						setSuccessMessage(false)
+						setSuccessForm(false)
 					}, 3000)
 				} else {
 					const data = await res.json()
-					setErrorMessage(data.message)
+					setErrorForm(() => ({
+						flag: true,
+						message: data.message,
+					}))
+					setTimeout(() => {
+						setErrorForm(() => ({
+							flag: false,
+							message: '',
+						}))
+					}, 4000)
 					return
 				}
 			})
 			.catch((error) => {
-				setErrorMessage('通信エラーが発生しました。もう一度お試しください。')
+				setErrorForm(() => ({
+					flag: true,
+					message: '通信エラーが発生しました。もう一度お試しください。',
+				}))
+				setTimeout(() => {
+					setErrorForm(() => ({
+						flag: false,
+						message: '',
+					}))
+				}, 4000)
 			})
 	}
 
-	if (loading) return <p>読み込み中...</p>
-	if (error) return <p>エラーが発生しました: {error}</p>
+	const handleReport = () => {
+		router.push('./report')
+	}
+
+	if (loading) return <Loading />
+	if (error) return <ErrorFetch message={error} />
 
 	return (
 		<>
 			<Header />
-			<main>
-				<h2 className="page-title">{scores.students.name} 成績登録</h2>
-				<p>※成績は半角数字</p>
-				<nav>
-					<ul className="flex">
-						<li>
-							<a href="#sem1">一学期</a>
-						</li>
-						<li>
-							<a href="#sem2">二学期</a>
-						</li>
-						<li>
-							<a href="#sem3">三学期</a>
-						</li>
-						<li>
-							<a href="#other">コメント</a>
-						</li>
-					</ul>
-				</nav>
-				<form onSubmit={handleSubmit(onSubmit)}>
-					<section id="sem1">
-						<h3>一学期</h3>
-						<Semester semster="sem1" register={register} scores={scores} />
-					</section>
-					<section id="sem2">
-						<h3>二学期</h3>
-						<Semester semster="sem2" register={register} scores={scores} />
-					</section>
-					<section id="sem3">
-						<h3>三学期</h3>
-						<Semester semster="sem3" register={register} scores={scores} />
-					</section>
-					<section id="other">
-						<h3>コメント</h3>
-						<TextAreaItem register={register} type="text" id="comments" label="メモ" defaultValues={scores.comments} />
-					</section>
-					<p className="flex justify-center mt-10">
-						<button type="submit">送信</button>
-					</p>
-					<p className="error form-error mt-5 text-center">{errorMessage}</p>
-					{successMessage && <p className="success bg-orange-50 text-orange-600 mb-10 p-3">登録しました！</p>}
-				</form>
+			<main className="mainWrapper pl-5 pr-5 pb-10">
+				<h2 className="pageTitle">成績登録</h2>
+				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
+					<nav>
+						<ul className="grid grid-flow-col text-center text-gray-500 bg-gray-100 rounded-lg p-2 mb-5">
+							{tabs.map((tab) => (
+								<li
+									key={tab.id}
+									className={`tab-item lex justify-center py-2 ${activeTab === tab.id ? 'bg-white rounded-lg shadow font-bold active' : ''}`}
+									onClick={() => setActiveTab(tab.id)}
+								>
+									{tab.title}
+								</li>
+							))}
+						</ul>
+					</nav>
+					<h3 className="mb-2 text-lg font-bold tracking-tight">
+						{scores.students.name}さん（{scores.year}年度）
+					</h3>
+					<form onSubmit={handleSubmit(onSubmit)} className="">
+						{tabs.map((tab) => (
+							<section key={tab.id} className={`tab-pane ${activeTab === tab.id ? 'block' : 'hidden'} scoresForm `}>
+								{tab.id !== 3 ? (
+									<>
+										<p className="text-right text-xs mb-2">※成績は半角数字で記入してください</p>
+										<div className="max-w-80 mx-auto">
+											<Semester semester={tab.semester} register={register} scores={scores} />
+										</div>
+									</>
+								) : (
+									<TextAreaItem register={register} type="text" id="comments" defaultValues={scores.comments} />
+								)}
+							</section>
+						))}
+						{errorForm.flag && <ErrorForm message={errorForm.message} />}
+						{successForm && <SuccessForm message="登録しました。" />}
+						<p className="flex justify-center mt-10">
+							<ButtonItem type="submit" text="保存" style="primary" />
+							<ButtonItem type="button" text="レポート" style="outline" onClick={handleReport} />
+						</p>
+					</form>
+				</section>
 			</main>
+			<Footer />
 		</>
 	)
 }

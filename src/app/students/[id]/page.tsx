@@ -4,13 +4,21 @@ import React, {useState, useEffect} from 'react'
 import {useRouter} from 'next/navigation'
 import {useForm} from 'react-hook-form'
 import {Header} from '@/components/Header'
+import {Footer} from '@/components/Footer'
+import {Loading} from '@/components/Loading'
 import {InputItem} from '@/components/InputItem'
 import {TextAreaItem} from '@/components/TextAreaItem'
+import {ButtonItem} from '@/components/ButtonItem'
+import {ErrorForm} from '@/components/ErrorForm'
+import {ErrorFetch} from '@/components/ErrorFetch'
+import {SuccessForm} from '@/components/SuccessForm'
 
 const EditStudent = ({params}) => {
 	const [student, setStudent] = useState(null)
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState(null)
+	const [errorForm, setErrorForm] = useState({flag: false, message: ''})
+	const [successForm, setSuccessForm] = useState(false)
 	const router = useRouter()
 
 	const {id} = params // ルートからIDを取得
@@ -40,11 +48,7 @@ const EditStudent = ({params}) => {
 		formState: {errors},
 	} = useForm({mode: 'all'})
 
-	const [errorMessage, setErrorMessage] = useState('')
-	const [successMessage, setSuccessMessage] = useState(false)
-
 	const onSubmit = async (data) => {
-		setErrorMessage('')
 		await fetch(`/api/students/${id}`, {
 			method: 'PUT',
 			headers: {
@@ -54,18 +58,36 @@ const EditStudent = ({params}) => {
 		})
 			.then(async (res) => {
 				if (res.ok) {
-					setSuccessMessage(true)
+					setSuccessForm(true)
 					setTimeout(() => {
-						setSuccessMessage(false)
-					}, 3000)
+						setSuccessForm(false)
+					}, 4000)
 				} else {
 					const data = await res.json()
-					setErrorMessage(data.message)
+					setErrorForm(() => ({
+						flag: true,
+						message: data.message,
+					}))
+					setTimeout(() => {
+						setErrorForm(() => ({
+							flag: false,
+							message: '',
+						}))
+					}, 4000)
 					return
 				}
 			})
-			.catch((error) => {
-				setErrorMessage('通信エラーが発生しました。もう一度お試しください。')
+			.catch(() => {
+				setErrorForm(() => ({
+					flag: true,
+					message: '通信エラーが発生しました。もう一度お試しください。',
+				}))
+				setTimeout(() => {
+					setErrorForm(() => ({
+						flag: false,
+						message: '',
+					}))
+				}, 4000)
 			})
 	}
 
@@ -80,79 +102,87 @@ const EditStudent = ({params}) => {
 				body: JSON.stringify(),
 			})
 			if (res.ok) {
-				router.push('/')
+				router.push('/students')
 			} else {
 				const data = await res.json()
-				setErrorMessage(data.message)
+				setErrorForm(() => ({
+					flag: true,
+					message: data.message,
+				}))
+				setTimeout(() => {
+					setErrorForm(() => ({
+						flag: false,
+						message: '',
+					}))
+				}, 4000)
 			}
 		}
 	}
 
-	if (loading) return <p>読み込み中...</p>
-	if (error) return <p>エラーが発生しました: {error}</p>
+	if (loading) return <Loading />
+	if (error) return <ErrorFetch message={error} />
 
 	return (
 		<>
 			<Header />
-			<main>
-				<h2 className="page-title">生徒情報編集</h2>
-				<form onSubmit={handleSubmit(onSubmit)} noValidate="novalidate">
-					<InputItem
-						register={register}
-						type="text"
-						id="name"
-						label="名前"
-						required={true}
-						pattern={{}}
-						errors={errors.name}
-						defaultValues={student.name}
-					/>
+			<main className="mainWrapper pl-5 pr-5 pb-10">
+				<h2 className="pageTitle">生徒情報編集</h2>
+				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
+					<form onSubmit={handleSubmit(onSubmit)} className="max-w-80 mx-auto" noValidate="novalidate">
+						<InputItem
+							register={register}
+							type="text"
+							id="name"
+							label="名前"
+							required={true}
+							pattern={{}}
+							errors={errors.name}
+							defaultValues={student.name}
+						/>
 
-					<InputItem
-						register={register}
-						type="text"
-						id="school"
-						label="学校"
-						pattern={{}}
-						errors={errors.school}
-						defaultValues={student.school}
-					/>
+						<InputItem
+							register={register}
+							type="text"
+							id="school"
+							label="学校"
+							pattern={{}}
+							errors={errors.school}
+							defaultValues={student.school}
+						/>
 
-					<InputItem
-						register={register}
-						type="number"
-						id="grade"
-						label="学年"
-						pattern={{
-							value: /^[0-9]*$/,
-							message: '半角数字で入力してください。',
-						}}
-						errors={errors.grade}
-						suffix="年生"
-						defaultValues={student.grade}
-					/>
+						<InputItem
+							register={register}
+							type="number"
+							id="grade"
+							label="学年"
+							pattern={{
+								value: /^[0-9]*$/,
+								message: '半角数字で入力してください。',
+							}}
+							errors={errors.grade}
+							suffix="年生"
+							defaultValues={student.grade}
+						/>
 
-					<TextAreaItem
-						register={register}
-						type="text"
-						id="note"
-						label="メモ"
-						pattern={{}}
-						errors={errors.note}
-						defaultValues={student.note}
-					/>
-
-					<p className="flex justify-center mt-10">
-						<button type="submit">送信</button>
-						<button type="button" onClick={handleDelete}>
-							削除
-						</button>
-					</p>
-					<p className="error form-error mt-5 text-center">{errorMessage}</p>
-
-					{successMessage && <p className="success bg-orange-50 text-orange-600 mb-10 p-3">登録しました！</p>}
-				</form>
+						<TextAreaItem
+							register={register}
+							type="text"
+							id="note"
+							label="メモ"
+							pattern={{}}
+							errors={errors.note}
+							defaultValues={student.note}
+						/>
+						{errorForm.flag && <ErrorForm message={errorForm.message} />}
+						{successForm && <SuccessForm message="登録しました。" />}
+						<p className="flex justify-center mx-auto mt-10">
+							<ButtonItem type="submit" text="保存" style="primary" />
+							<ButtonItem type="button" text="生徒削除" onClick={handleDelete} style="delete" />
+						</p>
+					</form>
+				</section>
 			</main>
+			<Footer />
 		</>
 	)
 }
