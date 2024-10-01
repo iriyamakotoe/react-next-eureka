@@ -9,10 +9,12 @@ import {TextAreaItem} from '@/components/TextAreaItem'
 import {ButtonItem} from '@/components/ButtonItem'
 import {ErrorForm} from '@/components/ErrorForm'
 import {SuccessForm} from '@/components/SuccessForm'
+import Link from 'next/link'
 
 const NewStudent = () => {
 	const [errorForm, setErrorForm] = useState({flag: false, message: ''})
 	const [successForm, setSuccessForm] = useState(false)
+	const params = {}
 
 	const {
 		register,
@@ -65,7 +67,7 @@ const NewStudent = () => {
 
 	return (
 		<>
-			<Header />
+			<Header params={params} name={undefined} />
 			<main className="mainWrapper pl-5 pr-5 pb-10">
 				<h2 className="pageTitle">新規生徒登録</h2>
 				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
@@ -78,8 +80,8 @@ const NewStudent = () => {
 							id="grade"
 							label="学年"
 							pattern={{
-								value: /^[0-9]*$/,
-								message: '半角数字で入力してください。',
+								value: /^[1-3]*$/,
+								message: '半角数字(1-3)で入力してください。',
 							}}
 							errors={errors.grade}
 							suffix="年生"
@@ -92,6 +94,14 @@ const NewStudent = () => {
 							<ButtonItem type="submit" text="登録" style="primary" />
 						</p>
 					</form>
+					<p>
+						<Link href="/students" className="flex justiry-center items-center">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+							</svg>
+							生徒一覧
+						</Link>
+					</p>
 				</section>
 			</main>
 			<Footer />

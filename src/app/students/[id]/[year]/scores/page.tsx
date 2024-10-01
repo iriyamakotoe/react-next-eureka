@@ -12,6 +12,7 @@ import {ButtonItem} from '@/components/ButtonItem'
 import {ErrorFetch} from '@/components/ErrorFetch'
 import {ErrorForm} from '@/components/ErrorForm'
 import {SuccessForm} from '@/components/SuccessForm'
+import Link from 'next/link'
 
 const Scores = ({params}) => {
 	const [scores, setScores] = useState(null)
@@ -153,12 +154,12 @@ const Scores = ({params}) => {
 
 	return (
 		<>
-			<Header />
+			<Header params={params} name={scores.students.name} />
 			<main className="mainWrapper pl-5 pr-5 pb-10">
 				<h2 className="pageTitle">成績登録</h2>
 				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
 					<nav>
-						<ul className="grid grid-flow-col text-center text-gray-500 bg-gray-100 rounded-lg p-2 mb-5">
+						<ul className="grid grid-flow-col text-center text-gray-800 bg-gray-100 rounded-lg p-2 mb-5">
 							{tabs.map((tab) => (
 								<li
 									key={tab.id}
@@ -195,6 +196,14 @@ const Scores = ({params}) => {
 							<ButtonItem type="button" text="レポート" style="outline" onClick={handleReport} />
 						</p>
 					</form>
+					<p>
+						<Link href="/students" className="flex justiry-center items-center">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+							</svg>
+							生徒一覧
+						</Link>
+					</p>
 				</section>
 			</main>
 			<Footer />

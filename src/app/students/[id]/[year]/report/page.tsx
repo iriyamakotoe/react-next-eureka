@@ -7,6 +7,7 @@ import {Loading} from '@/components/Loading'
 import {LineChart} from '@/components/LineChart'
 import {ButtonItem} from '@/components/ButtonItem'
 import {ErrorFetch} from '@/components/ErrorFetch'
+import Link from 'next/link'
 
 const Report = ({params}) => {
 	const [scores, setScores] = useState(null)
@@ -30,8 +31,8 @@ const Report = ({params}) => {
 			}
 			const data = await res.json()
 			setScores(data)
-		} catch (err) {
-			setError(err.message)
+		} catch (error) {
+			setError(error.message)
 		} finally {
 			setLoading(false)
 		}
@@ -46,7 +47,7 @@ const Report = ({params}) => {
 
 	return (
 		<>
-			<Header />
+			<Header params={params} name={scores.students.name} />
 			<main className="mainWrapper pl-5 pr-5 pb-10">
 				<h2 className="pageTitle">成績レポート</h2>
 				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
@@ -59,6 +60,14 @@ const Report = ({params}) => {
 					</div>
 					<p className="flex justify-center mx-auto mt-10">
 						<ButtonItem type="submit" text="印刷" onClick={handlePrint} style="primary" />
+					</p>
+					<p>
+						<Link href={`/students/${id}/${year}/scores`} className="flex justiry-center items-center">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+							</svg>
+							成績登録
+						</Link>
 					</p>
 				</section>
 			</main>
