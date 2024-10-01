@@ -30,7 +30,10 @@ const EditStudent = ({params}) => {
 
 	const fetchStudent = async () => {
 		try {
-			const res = await fetch(`/api/students/${id}`)
+			const res = await fetch(`/api/students/${id}`, {
+				method: 'GET',
+				credentials: 'include',
+			})
 			if (!res.ok) {
 				throw new Error('データの取得に失敗しました')
 			}
@@ -52,6 +55,7 @@ const EditStudent = ({params}) => {
 	const onSubmit = async (data) => {
 		await fetch(`/api/students/${id}`, {
 			method: 'PUT',
+			credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json',
 			},

@@ -1,27 +1,39 @@
 'use client'
 
 import {supabase} from '@/utils/supabase'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useRouter} from 'next/navigation'
-import {Plus_Jakarta_Sans} from 'next/font/google'
+import {ButtonItem} from '@/components/ButtonItem'
 import {ErrorFetch} from '@/components/ErrorFetch'
+import {Plus_Jakarta_Sans} from 'next/font/google'
+import Link from 'next/link'
 
 const plusJakartaSans = Plus_Jakarta_Sans({
 	weight: ['400', '700'],
 	subsets: ['latin'],
 })
 
-export const Header = () => {
+export const Header = ({params, name}) => {
+	const [session, setSession] = useState(false)
 	const [error, setError] = useState(null)
 	const router = useRouter()
+	const [isOpenMenu, setIsOpenMenu] = useState(false)
+
+	const toggleMenu = () => {
+		setIsOpenMenu(!isOpenMenu)
+	}
 
 	const handleLogout = async () => {
 		const {error} = await supabase.auth.signOut()
 
 		if (error) {
+			console.error('Logout error:', error)
 			setError('ログアウト中にエラーが発生しました。')
 			return
 		}
+
+		// クッキーを削除
+		document.cookie = 'supabaseToken=; Max-Age=0; path=/; SameSite=Strict;'
 
 		router.push('/login')
 	}
@@ -30,7 +42,7 @@ export const Header = () => {
 
 	return (
 		<>
-			<header className="flex justify-between items-center p-5 pb-2 text-white tracking-wider bg-theme-800">
+			<header className="flex justify-between items-center p-5 pb-1 text-white tracking-wider bg-theme-800">
 				<h1 className={plusJakartaSans.className}>
 					<a href="/students" className="flex ">
 						<span className="mr-1">
@@ -41,10 +53,59 @@ export const Header = () => {
 						<span className="font-bold">EUREKA</span>
 					</a>
 				</h1>
-				<p className="text-xs font-weight-normal">
-					<button onClick={handleLogout}>LOGOUT</button>
+
+				<p className="flex items-center">
+					<button onClick={toggleMenu} className="text-white focus:outline-none m-0">
+						<svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+							<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+						</svg>
+					</button>
 				</p>
 			</header>
+			{isOpenMenu && (
+				<nav className="p-8 rounded-lg bg-white inline-block w-auto absolute right-5 shadow-md">
+					<ul className="text-blue-900">
+						<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
+							<Link href="/students" className="block">
+								生徒一覧
+							</Link>
+						</li>
+						<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
+							<Link href="/students/create" className="block">
+								生徒新規登録
+							</Link>
+						</li>
+					</ul>
+
+					{params.year && (
+						<div>
+							<p className="text-blue-800 font-bold my-3">編集中：{name}さん</p>
+							<ul className="pl-4 border-l-2 border-blue-100 text-blue-900">
+								<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
+									<Link href={`/students/${params.id}/${params.year}/scores`} className="block">
+										成績登録
+									</Link>
+								</li>
+								<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
+									{' '}
+									<Link href={`/students/${params.id}/${params.year}/report`} className="block">
+										成績レポート
+									</Link>
+								</li>
+								<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
+									{' '}
+									<Link href={`/students/${params.id}`} className="block">
+										生徒情報編集
+									</Link>
+								</li>
+							</ul>
+						</div>
+					)}
+					<p className="flex justify-center mx-auto mt-5">
+						<ButtonItem type="button" text="ログアウト" onClick={handleLogout} />
+					</p>
+				</nav>
+			)}
 		</>
 	)
 }

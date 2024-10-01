@@ -33,7 +33,10 @@ const Scores = ({params}) => {
 
 	const fetchScores = async () => {
 		try {
-			const res = await fetch(`/api/students/${id}/${year}/scores`)
+			const res = await fetch(`/api/students/${id}/${year}/scores`, {
+				method: 'GET',
+				credentials: 'include',
+			})
 			if (!res.ok) {
 				throw new Error('データの取得に失敗しました')
 			}
@@ -98,6 +101,7 @@ const Scores = ({params}) => {
 
 		await fetch(`/api/students/${id}/${year}/scores`, {
 			method: 'PUT',
+			credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json',
 			},

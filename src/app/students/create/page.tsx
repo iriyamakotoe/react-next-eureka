@@ -23,38 +23,26 @@ const NewStudent = () => {
 	} = useForm({mode: 'all'})
 
 	const onSubmit = async (data) => {
-		await fetch('/api/students', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
-		})
-			.then(async (res) => {
-				if (res.ok) {
-					setSuccessForm(true)
-					setTimeout(() => {
-						setSuccessForm(false)
-					}, 3000)
-				} else {
-					const data = await res.json()
-					setErrorForm(() => ({
-						flag: true,
-						message: data.message,
-					}))
-					setTimeout(() => {
-						setErrorForm(() => ({
-							flag: false,
-							message: '',
-						}))
-					}, 4000)
-					return
-				}
+		try {
+			const res = await fetch('/api/students', {
+				method: 'POST',
+				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
 			})
-			.catch(() => {
+
+			if (res.ok) {
+				setSuccessForm(true)
+				setTimeout(() => {
+					setSuccessForm(false)
+				}, 3000)
+			} else {
+				const errorData = await res.json() // エラーデータを取得
 				setErrorForm(() => ({
 					flag: true,
-					message: '通信エラーが発生しました。もう一度お試しください。',
+					message: errorData.message || '不明なエラーが発生しました。',
 				}))
 				setTimeout(() => {
 					setErrorForm(() => ({
@@ -62,7 +50,20 @@ const NewStudent = () => {
 						message: '',
 					}))
 				}, 4000)
-			})
+			}
+		} catch (error) {
+			console.error('通信エラー:', error) // エラー内容をコンソールに出力
+			setErrorForm(() => ({
+				flag: true,
+				message: '通信エラーが発生しました。もう一度お試しください。',
+			}))
+			setTimeout(() => {
+				setErrorForm(() => ({
+					flag: false,
+					message: '',
+				}))
+			}, 4000)
+		}
 	}
 
 	return (

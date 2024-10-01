@@ -25,7 +25,10 @@ const Report = ({params}) => {
 
 	const fetchScores = async () => {
 		try {
-			const res = await fetch(`/api/students/${id}/${year}/scores`)
+			const res = await fetch(`/api/students/${id}/${year}/scores`, {
+				method: 'GET',
+				credentials: 'include',
+			})
 			if (!res.ok) {
 				throw new Error('データの取得に失敗しました')
 			}

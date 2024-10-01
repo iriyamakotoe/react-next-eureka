@@ -1,12 +1,12 @@
 'use client'
 
-import {supabase} from '@/utils/supabase'
 import {useState, useEffect} from 'react'
 import {useRouter} from 'next/navigation'
 import {Header} from '@/components/Header'
 import {Footer} from '@/components/Footer'
 import {Loading} from '@/components/Loading'
 import {ButtonItem} from '@/components/ButtonItem'
+import {ErrorFetch} from '@/components/ErrorFetch'
 import {ErrorForm} from '@/components/ErrorForm'
 
 const Students = () => {
@@ -16,6 +16,7 @@ const Students = () => {
 	const [error, setError] = useState(null)
 	const [errorForm, setErrorForm] = useState({flag: false, message: ''})
 	const router = useRouter()
+	const params = {}
 
 	useEffect(() => {
 		fetchStudents()
@@ -23,18 +24,9 @@ const Students = () => {
 
 	const fetchStudents = async () => {
 		try {
-			const {data: sessionData} = await supabase.auth.getSession()
-			const token = sessionData?.session?.access_token
-
-			if (!token) {
-				throw new Error('ユーザーがログインしていません')
-			}
-
 			const res = await fetch('/api/students', {
 				method: 'GET',
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
+				credentials: 'include',
 			})
 			if (!res.ok) {
 				throw new Error('データの取得に失敗しました')
@@ -63,9 +55,7 @@ const Students = () => {
 	const fetchScore = async (id, year) => {
 		const res = await fetch(`/api/students/${id}/${year}/scores`, {
 			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json',
-			},
+			credentials: 'include',
 		})
 		if (res.ok) {
 			router.push(`/students/${id}/${year}/scores`)
@@ -77,6 +67,7 @@ const Students = () => {
 	const createScore = async (id, year) => {
 		const res = await fetch(`/api/students/${id}/${year}/scores`, {
 			method: 'POST',
+			credentials: 'include',
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -112,7 +103,7 @@ const Students = () => {
 
 	return (
 		<>
-			<Header />
+			<Header params={params} name={undefined} />
 			<main className="mainWrapper pl-5 pr-5 pb-10">
 				<h2 className="pageTitle">生徒一覧</h2>
 				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
