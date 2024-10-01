@@ -1,5 +1,6 @@
 'use client'
 
+import {getServerSideProps} from 'next'
 import {useState, useEffect} from 'react'
 import {useRouter} from 'next/navigation'
 import {Header} from '@/components/Header'
@@ -115,13 +116,13 @@ const Students = () => {
 
 					{students.map((student) => (
 						<section key={student.id}>
-							<div class="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5">
-								<div class="p-5">
+							<div className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5">
+								<div className="p-5">
 									<div className="flex justify-between">
-										<h3 class="mb-2 text-lg font-bold tracking-tight">{student.name}</h3>
+										<h3 className="mb-2 text-lg font-bold tracking-tight">{student.name}</h3>
 										<ButtonItem type="button" text="編集" onClick={() => editStudent(student.id)} />
 									</div>
-									<p class="mb-5 text-neutral-500">
+									<p className="mb-5 text-neutral-500">
 										{student.school}　{student.grade}年生
 										<br />
 										{student.note}

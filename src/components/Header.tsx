@@ -1,6 +1,5 @@
 'use client'
 
-import {supabase} from '@/utils/supabase'
 import {useEffect, useState} from 'react'
 import {useRouter} from 'next/navigation'
 import {ButtonItem} from '@/components/ButtonItem'
@@ -14,7 +13,6 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 })
 
 export const Header = ({params, name}) => {
-	const [session, setSession] = useState(false)
 	const [error, setError] = useState(null)
 	const router = useRouter()
 	const [isOpenMenu, setIsOpenMenu] = useState(false)
@@ -24,18 +22,18 @@ export const Header = ({params, name}) => {
 	}
 
 	const handleLogout = async () => {
-		const {error} = await supabase.auth.signOut()
-
-		if (error) {
-			console.error('Logout error:', error)
-			setError('ログアウト中にエラーが発生しました。')
-			return
+		try {
+			const res = await fetch('/api/logout', {
+				method: 'POST',
+				credentials: 'include',
+			})
+			if (!res.ok) {
+				throw new Error('Logout failed')
+			}
+			router.push('/login')
+		} catch (error) {
+			console.error('Error:', error)
 		}
-
-		// クッキーを削除
-		document.cookie = 'supabaseToken=; Max-Age=0; path=/; SameSite=Strict;'
-
-		router.push('/login')
 	}
 
 	if (error) return <ErrorFetch message={error} />
@@ -53,7 +51,7 @@ export const Header = ({params, name}) => {
 						<span className="font-bold">EUREKA</span>
 					</a>
 				</h1>
-
+				{/* {token && ( */}
 				<p className="flex items-center">
 					<button onClick={toggleMenu} className="text-white focus:outline-none m-0">
 						<svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -61,6 +59,7 @@ export const Header = ({params, name}) => {
 						</svg>
 					</button>
 				</p>
+				{/* )} */}
 			</header>
 			{isOpenMenu && (
 				<nav className="p-8 rounded-lg bg-white inline-block w-auto absolute right-5 shadow-md">

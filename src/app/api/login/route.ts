@@ -29,7 +29,7 @@ export async function POST(req) {
 				'Set-Cookie': serialize('supabaseToken', token, {
 					httpOnly: true,
 					secure: process.env.NODE_ENV !== 'development',
-					maxAge: 3600, // 1時間
+					maxAge: 259200, // 3日間
 					path: '/',
 					sameSite: 'strict',
 				}),

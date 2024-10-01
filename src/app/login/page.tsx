@@ -21,7 +21,6 @@ const Login = () => {
 	} = useForm({mode: 'all'})
 
 	const handleLogin = async (data) => {
-		console.log(data)
 		try {
 			const response = await fetch('/api/login', {
 				method: 'POST',
@@ -39,8 +38,6 @@ const Login = () => {
 				const error = await response.json()
 				throw new Error(error.message)
 			}
-
-			// ログイン成功後にリダイレクト
 			router.push('/students')
 		} catch (err) {
 			if (err.message === 'Invalid credentials') {
