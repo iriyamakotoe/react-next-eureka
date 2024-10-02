@@ -1,6 +1,5 @@
 'use client'
 
-import {getServerSideProps} from 'next'
 import {useState, useEffect} from 'react'
 import {useRouter} from 'next/navigation'
 import {Header} from '@/components/Header'
@@ -155,5 +154,4 @@ const Students = () => {
 		</>
 	)
 }
-
 export default Students
