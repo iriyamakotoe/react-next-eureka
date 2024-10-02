@@ -48,7 +48,11 @@ h2.pageTitle {
 	letter-spacing: 2.75px;
 	text-shadow: 0 0 35px #557ea7;
 	background: url(./assets/img/student.svg) top center no-repeat;
-	padding-top: 1.6em;
+	padding-top: 1.7em;
+}
+.ico-back {
+	background: url(./assets/img/ico_back.svg) top left no-repeat;
+	padding-left: 1.7em;
 }
 .tab-pane {
 	display: none;

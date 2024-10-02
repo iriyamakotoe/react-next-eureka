@@ -2,8 +2,8 @@ import {supabase} from '@/utils/supabase'
 import {authenticate} from '../../../../auth'
 
 // GETメソッド: 学生IDと年度に基づいてスコアを取得
-export async function GET(req, {params}) {
-	const {user, error: authError} = await authenticate(req)
+export async function GET(req: Request, {params}: {params: {[key: string]: string | string[]}}) {
+	const {error: authError} = await authenticate(req)
 
 	// 認証に失敗した場合
 	if (authError) {
@@ -26,14 +26,14 @@ export async function GET(req, {params}) {
 		}
 
 		return new Response(JSON.stringify(data), {status: 200})
-	} catch (err) {
+	} catch {
 		return new Response(JSON.stringify({message: 'Internal Server Error'}), {status: 500})
 	}
 }
 
 // POSTメソッド: 新しいスコアを登録
-export async function POST(req, {params}) {
-	const {user, error: authError} = await authenticate(req)
+export async function POST(req: Request) {
+	const {error: authError} = await authenticate(req)
 
 	// 認証に失敗した場合
 	if (authError) {
@@ -50,14 +50,14 @@ export async function POST(req, {params}) {
 		}
 
 		return new Response(JSON.stringify({message: 'Student Score added successfully'}), {status: 200})
-	} catch (err) {
+	} catch {
 		return new Response(JSON.stringify({message: 'Internal Server Error'}), {status: 500})
 	}
 }
 
 // PUTメソッド: 既存のスコアを更新
-export async function PUT(req, {params}) {
-	const {user, error: authError} = await authenticate(req)
+export async function PUT(req: Request) {
+	const {error: authError} = await authenticate(req)
 
 	// 認証に失敗した場合
 	if (authError) {
@@ -78,7 +78,7 @@ export async function PUT(req, {params}) {
 		}
 
 		return new Response(JSON.stringify({message: 'Student Score updated successfully'}), {status: 200})
-	} catch (err) {
+	} catch {
 		return new Response(JSON.stringify({message: 'Internal Server Error'}), {status: 500})
 	}
 }

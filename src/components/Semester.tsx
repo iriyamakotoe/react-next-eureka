@@ -2,12 +2,15 @@
 
 import React from 'react'
 import {InputItem} from '@/components/InputItem'
+import {UseFormRegister} from 'react-hook-form'
 
-export const Semester = (props) => {
-	const register = props.register
-	const scores = props.scores
-	const semester = props.semester
+interface Props {
+	register: UseFormRegister<FormData>
+	scores: string
+	semester: string
+}
 
+export const Semester: React.FC<Props> = ({register, scores, semester}) => {
 	return (
 		<>
 			<dl className="flex items-center justify-around max-w-80 mx-auto mb-5">
@@ -16,7 +19,7 @@ export const Semester = (props) => {
 					<InputItem
 						register={register}
 						type="number"
-						id={semester + '_mid_japanese'}
+						name={semester + '_mid_japanese'}
 						placeholder="中間"
 						suffix="点"
 						defaultValues={scores[semester]?.mid?.japanese}
@@ -26,7 +29,7 @@ export const Semester = (props) => {
 					<InputItem
 						register={register}
 						type="number"
-						id={semester + '_end_japanese'}
+						name={semester + '_end_japanese'}
 						placeholder="期末"
 						suffix="点"
 						defaultValues={scores[semester]?.end?.japanese}
@@ -39,7 +42,7 @@ export const Semester = (props) => {
 					<InputItem
 						register={register}
 						type="number"
-						id={semester + '_mid_arithmetic'}
+						name={semester + '_mid_arithmetic'}
 						placeholder="中間"
 						suffix="点"
 						defaultValues={scores[semester]?.mid?.arithmetic}
@@ -49,9 +52,8 @@ export const Semester = (props) => {
 					<InputItem
 						register={register}
 						type="number"
-						id={semester + '_end_arithmetic'}
+						name={semester + '_end_arithmetic'}
 						placeholder="期末"
-						suffix="点"
 						suffix="点"
 						defaultValues={scores[semester]?.end?.arithmetic}
 					/>
@@ -63,7 +65,7 @@ export const Semester = (props) => {
 					<InputItem
 						register={register}
 						type="number"
-						id={semester + '_mid_english'}
+						name={semester + '_mid_english'}
 						placeholder="中間"
 						suffix="点"
 						defaultValues={scores[semester]?.mid?.english}
@@ -73,7 +75,7 @@ export const Semester = (props) => {
 					<InputItem
 						register={register}
 						type="number"
-						id={semester + '_end_english'}
+						name={semester + '_end_english'}
 						placeholder="期末"
 						suffix="点"
 						defaultValues={scores[semester]?.end?.english}
@@ -86,7 +88,7 @@ export const Semester = (props) => {
 					<InputItem
 						register={register}
 						type="number"
-						id={semester + '_mid_social'}
+						name={semester + '_mid_social'}
 						placeholder="中間"
 						suffix="点"
 						defaultValues={scores[semester]?.mid?.social}
@@ -96,7 +98,7 @@ export const Semester = (props) => {
 					<InputItem
 						register={register}
 						type="number"
-						id={semester + '_end_social'}
+						name={semester + '_end_social'}
 						placeholder="期末"
 						suffix="点"
 						defaultValues={scores[semester]?.end?.social}
@@ -109,7 +111,7 @@ export const Semester = (props) => {
 					<InputItem
 						register={register}
 						type="number"
-						id={semester + '_mid_science'}
+						name={semester + '_mid_science'}
 						placeholder="中間"
 						suffix="点"
 						defaultValues={scores[semester]?.mid?.science}
@@ -119,7 +121,7 @@ export const Semester = (props) => {
 					<InputItem
 						register={register}
 						type="number"
-						id={semester + '_end_science'}
+						name={semester + '_end_science'}
 						placeholder="期末"
 						suffix="点"
 						defaultValues={scores[semester]?.end?.science}

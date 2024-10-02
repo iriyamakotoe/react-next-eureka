@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useState, useEffect} from 'react'
+import useFetchScores from '../../../../hooks/useFetchScores'
 import {Header} from '@/components/Header'
 import {Footer} from '@/components/Footer'
 import {Loading} from '@/components/Loading'
@@ -9,43 +9,15 @@ import {ButtonItem} from '@/components/ButtonItem'
 import {ErrorFetch} from '@/components/ErrorFetch'
 import Link from 'next/link'
 
-const Report = ({params}) => {
-	const [scores, setScores] = useState(null)
-	const [loading, setLoading] = useState(true)
-	const [error, setError] = useState(null)
-
-	const {year, id} = params
-
-	useEffect(() => {
-		if (!scores) {
-			fetchScores()
-		}
-		console.log(scores)
-	}, [scores])
-
-	const fetchScores = async () => {
-		try {
-			const res = await fetch(`/api/students/${id}/${year}/scores`, {
-				method: 'GET',
-				credentials: 'include',
-			})
-			if (!res.ok) {
-				throw new Error('データの取得に失敗しました')
-			}
-			const data = await res.json()
-			setScores(data)
-		} catch (error) {
-			setError(error.message)
-		} finally {
-			setLoading(false)
-		}
-	}
+const Report = ({params}: {params: {[key: string]: string}}) => {
+	const {id, year} = params
+	const {scores, loading, error} = useFetchScores(id, year)
 
 	const handlePrint = () => {
 		window.print()
 	}
 
-	if (loading) return <Loading />
+	if (loading || !scores) return <Loading />
 	if (error) return <ErrorFetch message={error} />
 
 	return (
@@ -65,10 +37,10 @@ const Report = ({params}) => {
 						<ButtonItem type="submit" text="印刷" onClick={handlePrint} style="primary" />
 					</p>
 					<p>
-						<Link href={`/students/${id}/${year}/scores`} className="flex justiry-center items-center">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-							</svg>
+						<Link
+							href={`/students/${id}/${year}/scores`}
+							className="ico-back text-sm text-gray-700 flex justiry-center items-center"
+						>
 							成績登録
 						</Link>
 					</p>

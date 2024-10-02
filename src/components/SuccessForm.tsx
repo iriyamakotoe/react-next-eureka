@@ -2,8 +2,12 @@
 
 import React from 'react'
 
-export const SuccessForm = (props) => {
-	const successMessage = props.message
+interface Props {
+	message: string
+}
+
+export const SuccessForm: React.FC<Props> = ({message}) => {
+	const successMessage = message
 	return (
 		<>
 			<div className="relative w-full rounded-lg border border-transparent bg-green-50 p-4 [&>svg]:absolute [&>svg]:text-foreground [&>svg]:left-4 [&>svg]:top-4 [&>svg+div]:translate-y-[-3px] [&:has(svg)]:pl-11 text-green-600 mt-5">

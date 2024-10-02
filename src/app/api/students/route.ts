@@ -2,8 +2,8 @@ import {supabase} from '@/utils/supabase'
 import {authenticate} from '../auth'
 
 // GETメソッド
-export async function GET(req) {
-	const {user, error} = await authenticate(req)
+export async function GET(req: Request) {
+	const {error} = await authenticate(req)
 
 	if (error) {
 		return new Response(JSON.stringify({message: error}), {status: 401})
@@ -17,14 +17,14 @@ export async function GET(req) {
 		}
 
 		return new Response(JSON.stringify(students), {status: 200})
-	} catch (error) {
+	} catch {
 		return new Response(JSON.stringify({message: 'Internal Server Error'}), {status: 500})
 	}
 }
 
 // POSTメソッド
-export async function POST(req) {
-	const {user, error} = await authenticate(req)
+export async function POST(req: Request) {
+	const {error} = await authenticate(req)
 
 	if (error) {
 		return new Response(JSON.stringify({message: error}), {status: 401})
@@ -43,7 +43,7 @@ export async function POST(req) {
 		}
 
 		return new Response(JSON.stringify({message: 'Student added successfully'}), {status: 200})
-	} catch (error) {
+	} catch {
 		return new Response(JSON.stringify({message: 'Internal Server Error'}), {status: 500})
 	}
 }

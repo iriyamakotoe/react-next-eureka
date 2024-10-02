@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useState} from 'react'
+import {useState} from 'react'
 import {useForm} from 'react-hook-form'
 import {Header} from '@/components/Header'
 import {Footer} from '@/components/Footer'
@@ -11,18 +11,28 @@ import {ErrorForm} from '@/components/ErrorForm'
 import {SuccessForm} from '@/components/SuccessForm'
 import Link from 'next/link'
 
+interface Student {
+	name: string
+	school: string
+	grade: number
+	note: string
+}
+
+type FormData = Student
+
 const NewStudent = () => {
 	const [errorForm, setErrorForm] = useState({flag: false, message: ''})
 	const [successForm, setSuccessForm] = useState(false)
-	const params = {}
 
 	const {
 		register,
 		handleSubmit,
 		formState: {errors},
-	} = useForm({mode: 'all'})
+	} = useForm<FormData>({
+		mode: 'all',
+	})
 
-	const onSubmit = async (data) => {
+	const onSubmit = async (data: FormData) => {
 		try {
 			const res = await fetch('/api/students', {
 				method: 'POST',
@@ -39,10 +49,10 @@ const NewStudent = () => {
 					setSuccessForm(false)
 				}, 3000)
 			} else {
-				const errorData = await res.json() // エラーデータを取得
+				const data = await res.json()
 				setErrorForm(() => ({
 					flag: true,
-					message: errorData.message || '不明なエラーが発生しました。',
+					message: data.message || '不明なエラーが発生しました。',
 				}))
 				setTimeout(() => {
 					setErrorForm(() => ({
@@ -50,9 +60,9 @@ const NewStudent = () => {
 						message: '',
 					}))
 				}, 4000)
+				return
 			}
-		} catch (error) {
-			console.error('通信エラー:', error) // エラー内容をコンソールに出力
+		} catch {
 			setErrorForm(() => ({
 				flag: true,
 				message: '通信エラーが発生しました。もう一度お試しください。',
@@ -68,17 +78,17 @@ const NewStudent = () => {
 
 	return (
 		<>
-			<Header params={params} name={undefined} />
+			<Header />
 			<main className="mainWrapper pl-5 pr-5 pb-10">
 				<h2 className="pageTitle">新規生徒登録</h2>
 				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
-					<form onSubmit={handleSubmit(onSubmit)} noValidate="novalidate" className="max-w-80 mx-auto">
-						<InputItem register={register} type="text" id="name" label="名前" required={true} pattern={{}} errors={errors.name} />
-						<InputItem register={register} type="text" id="school" label="学校" pattern={{}} errors={errors.school} />
+					<form onSubmit={handleSubmit(onSubmit)} noValidate className="max-w-80 mx-auto">
+						<InputItem register={register} type="text" name="name" label="名前" required={true} errors={errors.name} />
+						<InputItem register={register} type="text" name="school" label="学校" errors={errors.school} />
 						<InputItem
 							register={register}
 							type="number"
-							id="grade"
+							name="grade"
 							label="学年"
 							pattern={{
 								value: /^[1-3]*$/,
@@ -88,7 +98,7 @@ const NewStudent = () => {
 							suffix="年生"
 						/>
 
-						<TextAreaItem register={register} type="text" id="note" label="メモ" pattern={{}} errors={errors.note} />
+						<TextAreaItem register={register} type="text" name="note" label="メモ" errors={errors.note} />
 						{errorForm.flag && <ErrorForm message={errorForm.message} />}
 						{successForm && <SuccessForm message="登録しました。" />}
 						<p className="flex justify-center mt-10">
@@ -96,10 +106,7 @@ const NewStudent = () => {
 						</p>
 					</form>
 					<p>
-						<Link href="/students" className="flex justiry-center items-center">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-							</svg>
+						<Link href="/students" className="ico-back text-sm text-gray-700 flex justiry-center items-center">
 							生徒一覧
 						</Link>
 					</p>

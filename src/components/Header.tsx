@@ -1,21 +1,26 @@
 'use client'
 
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import {useRouter} from 'next/navigation'
 import {ButtonItem} from '@/components/ButtonItem'
 import {ErrorFetch} from '@/components/ErrorFetch'
 import {Plus_Jakarta_Sans} from 'next/font/google'
 import Link from 'next/link'
 
+interface Props {
+	params?: {id: string; year: string | null}
+	name?: string
+}
+
 const plusJakartaSans = Plus_Jakarta_Sans({
 	weight: ['400', '700'],
 	subsets: ['latin'],
 })
 
-export const Header = ({params, name}) => {
-	const [error, setError] = useState(null)
-	const router = useRouter()
+export const Header: React.FC<Props> = ({params, name}) => {
+	const [error, setError] = useState<string | null>(null)
 	const [isOpenMenu, setIsOpenMenu] = useState(false)
+	const router = useRouter()
 
 	const toggleMenu = () => {
 		setIsOpenMenu(!isOpenMenu)
@@ -31,8 +36,10 @@ export const Header = ({params, name}) => {
 				throw new Error('Logout failed')
 			}
 			router.push('/login')
-		} catch (error) {
-			console.error('Error:', error)
+		} catch (err: unknown) {
+			if (err instanceof Error) {
+				setError(err.message)
+			}
 		}
 	}
 
@@ -76,7 +83,7 @@ export const Header = ({params, name}) => {
 						</li>
 					</ul>
 
-					{params.year && (
+					{params && (
 						<div>
 							<p className="text-blue-800 font-bold my-3">編集中：{name}さん</p>
 							<ul className="pl-4 border-l-2 border-blue-100 text-blue-900">

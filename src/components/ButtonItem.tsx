@@ -2,9 +2,16 @@
 
 import React from 'react'
 
-export const ButtonItem = (props) => {
+interface Props {
+	type: 'submit' | 'reset' | 'button'
+	text: string
+	onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
+	style?: string
+}
+
+export const ButtonItem: React.FC<Props> = ({type, text, onClick, style}) => {
 	let buttonStyle
-	switch (props.style) {
+	switch (style) {
 		case 'primary':
 			buttonStyle =
 				'py-1.5 px-4 transition-colors bg-green-600 border active:bg-green-800 font-bold border-green-700 text-white rounded-lg hover:bg-green-700 disabled:opacity-50'
@@ -25,8 +32,8 @@ export const ButtonItem = (props) => {
 
 	return (
 		<>
-			<button onClick={props.onClick} type={props.type} className={buttonStyle}>
-				{props.text}
+			<button onClick={onClick} type={type} className={buttonStyle}>
+				{text}
 			</button>
 		</>
 	)

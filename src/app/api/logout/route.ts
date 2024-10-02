@@ -1,6 +1,6 @@
 import {serialize} from 'cookie'
 
-export async function POST(req) {
+export async function POST() {
 	try {
 		// クッキーを削除
 		const cookie = serialize('supabaseToken', '', {

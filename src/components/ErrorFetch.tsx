@@ -2,8 +2,12 @@
 
 import React from 'react'
 
-export const ErrorFetch = (props) => {
-	const errorMessage = props.message
+interface Props {
+	message: string
+}
+
+export const ErrorFetch: React.FC<Props> = ({message}) => {
+	const errorMessage = message
 	return (
 		<>
 			<p className="w-full min-h-screen text-white text-s flex items-center justify-center">

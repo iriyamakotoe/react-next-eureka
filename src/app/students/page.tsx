@@ -1,6 +1,7 @@
 'use client'
 
-import {useState, useEffect} from 'react'
+import useFetchStudents from '../hooks/useFetchStudents'
+import {useState} from 'react'
 import {useRouter} from 'next/navigation'
 import {Header} from '@/components/Header'
 import {Footer} from '@/components/Footer'
@@ -9,50 +10,34 @@ import {ButtonItem} from '@/components/ButtonItem'
 import {ErrorFetch} from '@/components/ErrorFetch'
 import {ErrorForm} from '@/components/ErrorForm'
 
+interface Student {
+	id: number
+	name: string
+	school: string
+	grade: number
+	note: string
+}
+
 const Students = () => {
-	const [students, setStudents] = useState(null)
-	const [selectedYear, setSelectedYear] = useState('2024')
-	const [loading, setLoading] = useState(true)
-	const [error, setError] = useState(null)
+	const {students, loading, error} = useFetchStudents(null)
+
+	const [selectedYear, setSelectedYear] = useState(2024)
 	const [errorForm, setErrorForm] = useState({flag: false, message: ''})
 	const router = useRouter()
-	const params = {}
-
-	useEffect(() => {
-		fetchStudents()
-	}, [])
-
-	const fetchStudents = async () => {
-		try {
-			const res = await fetch('/api/students', {
-				method: 'GET',
-				credentials: 'include',
-			})
-			if (!res.ok) {
-				throw new Error('データの取得に失敗しました')
-			}
-			const data = await res.json()
-			setStudents(data)
-		} catch (err) {
-			setError(err.message)
-		} finally {
-			setLoading(false)
-		}
-	}
 
 	const createStudent = () => {
 		router.push('/students/create')
 	}
 
-	const editStudent = (id) => {
+	const editStudent = (id: number) => {
 		router.push(`/students/${id}`)
 	}
 
-	const handleSelect = (e) => {
-		setSelectedYear(e.target.value)
+	const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		setSelectedYear(Number(e.target.value))
 	}
 
-	const fetchScore = async (id, year) => {
+	const fetchScore = async (id: number | string, year: number) => {
 		const res = await fetch(`/api/students/${id}/${year}/scores`, {
 			method: 'GET',
 			credentials: 'include',
@@ -64,7 +49,7 @@ const Students = () => {
 		}
 	}
 
-	const createScore = async (id, year) => {
+	const createScore = async (id: number | string, year: number) => {
 		const res = await fetch(`/api/students/${id}/${year}/scores`, {
 			method: 'POST',
 			credentials: 'include',
@@ -98,12 +83,12 @@ const Students = () => {
 		}
 	}
 
-	if (loading) return <Loading />
+	if (loading || !students) return <Loading />
 	if (error) return <ErrorFetch message={error} />
 
 	return (
 		<>
-			<Header params={params} name={undefined} />
+			<Header />
 			<main className="mainWrapper pl-5 pr-5 pb-10">
 				<h2 className="pageTitle">生徒一覧</h2>
 				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
@@ -113,7 +98,7 @@ const Students = () => {
 						</p>
 					</div>
 
-					{students.map((student) => (
+					{Object.values(students).map((student: Student) => (
 						<section key={student.id}>
 							<div className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5">
 								<div className="p-5">

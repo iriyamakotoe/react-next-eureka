@@ -1,33 +1,38 @@
 'use client'
 
 import React from 'react'
+import {UseFormRegister} from 'react-hook-form'
 
-export const TextAreaItem = (props) => {
-	const id = props.id
-	const registerOptions = props.required
-		? props.register(id, {
-				required: `${props.label}は必須です`,
-				pattern: props.pattern,
+interface Props {
+	register: UseFormRegister<FormData>
+	name: keyof FormData
+	label?: string
+	required?: boolean
+	errors?: Record<string, string>
+	placeholder?: string
+}
+
+export const TextAreaItem: React.FC<Props> = ({register, name, label, required, errors, placeholder}) => {
+	const registerOptions = required
+		? register(name, {
+				required: `${label}は必須です`,
 			})
-		: props.register(id, {
-				pattern: props.pattern,
-			})
+		: register(name)
 	return (
 		<>
 			<p className="mb-5">
-				<label htmlFor={id} className="text-sm text-gray-700 block mb-1 font-medium">
-					{props.label}
+				<label className="text-sm text-gray-700 block mb-1 font-medium">
+					{label}
+					<textarea
+						name={name}
+						rows="5"
+						cols="33"
+						{...registerOptions}
+						className={`w-full bg-gray-100 rounded border border-gray-200 py-1 px-3 block focus:ring-blue-500 focus:border-blue-500 text-gray-700 ${errors ? 'border-2 border-red-500' : 'border-2 focus:ring-blue-500 focus:border-blue-500'}`}
+						placeholder={placeholder}
+					/>
 				</label>
-				<textarea
-					id={id}
-					rows="5"
-					cols="33"
-					defaultValue={props.defaultValues}
-					{...registerOptions}
-					className={`w-full bg-gray-100 rounded border border-gray-200 py-1 px-3 block focus:ring-blue-500 focus:border-blue-500 text-gray-700 ${props.errors ? 'border-2 border-red-500' : 'border-2 focus:ring-blue-500 focus:border-blue-500'}`}
-					placeholder={props.placeholder}
-				/>
-				{props.errors && <p className="text-sm text-red-600 mt-1">{props.errors?.message}</p>}
+				{errors && <p className="text-sm text-red-600 mt-1">{errors?.message}</p>}
 			</p>
 		</>
 	)

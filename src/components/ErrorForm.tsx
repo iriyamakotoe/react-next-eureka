@@ -2,8 +2,12 @@
 
 import React from 'react'
 
-export const ErrorForm = (props) => {
-	const errorForm = props.message
+interface Props {
+	message: string
+}
+
+export const ErrorForm: React.FC<Props> = ({message}) => {
+	const errorForm = message
 	return (
 		<>
 			<div className="relative w-full rounded-lg border border-transparent bg-red-50 p-4 [&>svg]:absolute [&>svg]:text-foreground [&>svg]:left-4 [&>svg]:top-4 [&>svg+div]:translate-y-[-3px] [&:has(svg)]:pl-11 text-red-600">

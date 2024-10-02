@@ -1,6 +1,7 @@
 'use client'
 
-import React, {useState, useEffect} from 'react'
+import useFetchScores from '../../../../hooks/useFetchScores'
+import {useState} from 'react'
 import {useRouter} from 'next/navigation'
 import {useForm} from 'react-hook-form'
 import {Header} from '@/components/Header'
@@ -14,56 +15,42 @@ import {ErrorForm} from '@/components/ErrorForm'
 import {SuccessForm} from '@/components/SuccessForm'
 import Link from 'next/link'
 
-const Scores = ({params}) => {
-	const [scores, setScores] = useState(null)
-	const [loading, setLoading] = useState(true)
-	const [error, setError] = useState(null)
+type semObj = {
+	mid: {[key: string]: number}
+	end: {[key: string]: number}
+}
+interface Scores {
+	student_id: number
+	year: number
+	sem1: semObj
+	sem2: semObj
+	sem3: semObj
+	comments: string
+	students: {name: string; id: number}
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	[key: string]: any
+}
+type FormData = Scores
+
+const Scores = ({params}: {params: {[key: string]: string}}) => {
+	const {id, year} = params
+	const {scores, loading, error} = useFetchScores(id, year)
+
 	const [errorForm, setErrorForm] = useState({flag: false, message: ''})
 	const [successForm, setSuccessForm] = useState(false)
 	const router = useRouter()
+
 	const [activeTab, setActiveTab] = useState(0)
-
-	const {year, id} = params
-
-	useEffect(() => {
-		if (!scores) {
-			fetchScores()
-		}
-	}, [scores])
-
-	const fetchScores = async () => {
-		try {
-			const res = await fetch(`/api/students/${id}/${year}/scores`, {
-				method: 'GET',
-				credentials: 'include',
-			})
-			if (!res.ok) {
-				throw new Error('データの取得に失敗しました')
-			}
-			const data = await res.json()
-			setScores(data)
-		} catch (err) {
-			setError(err.message)
-		} finally {
-			setLoading(false)
-		}
-	}
-
 	const tabs = [
 		{id: 0, title: '一学期', semester: 'sem1'},
 		{id: 1, title: '二学期', semester: 'sem2'},
 		{id: 2, title: '三学期', semester: 'sem3'},
 		{id: 3, title: 'コメント'},
 	]
-	const {
-		register,
-		handleSubmit,
-		formState: {errors},
-	} = useForm({mode: 'all'})
 
-	const onSubmit = async (data) => {
-		console.log(data)
+	const {register, handleSubmit} = useForm<FormData>({mode: 'all'})
 
+	const onSubmit = async (data: FormData) => {
 		const formatData = () => {
 			const sem1 = {
 				end: {},
@@ -78,14 +65,18 @@ const Scores = ({params}) => {
 				mid: {},
 			}
 
-			const semScores = (prefix, scoreObj) => {
+			const semScores = (prefix: string, semObj: semObj) => {
 				Object.keys(data).forEach((key) => {
 					if (key.startsWith(`${prefix}_mid`)) {
-						const subjectName = key.split('_').pop() // 科目名を取得
-						scoreObj.mid[subjectName] = data[key] // mid にスコアを追加
+						const subjectName = key.split('_').pop()
+						if (subjectName) {
+							semObj.mid[subjectName] = data[key]
+						}
 					} else if (key.startsWith(`${prefix}_end`)) {
-						const subjectName = key.split('_').pop() // 科目名を取得
-						scoreObj.end[subjectName] = data[key] // end にスコアを追加
+						const subjectName = key.split('_').pop()
+						if (subjectName) {
+							semObj.end[subjectName] = data[key]
+						}
 					}
 				})
 			}
@@ -97,48 +88,34 @@ const Scores = ({params}) => {
 
 			return {sem1, sem2, sem3}
 		}
-		const formattedData = formatData(data)
+		const formattedData = formatData()
 
-		await fetch(`/api/students/${id}/${year}/scores`, {
-			method: 'PUT',
-			credentials: 'include',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				student_id: id,
-				year: year,
-				sem1: formattedData.sem1,
-				sem2: formattedData.sem2,
-				sem3: formattedData.sem3,
-				comments: data.comments,
-			}),
-		})
-			.then(async (res) => {
-				if (res.ok) {
-					setSuccessForm(true)
-					setTimeout(() => {
-						setSuccessForm(false)
-					}, 3000)
-				} else {
-					const data = await res.json()
-					setErrorForm(() => ({
-						flag: true,
-						message: data.message,
-					}))
-					setTimeout(() => {
-						setErrorForm(() => ({
-							flag: false,
-							message: '',
-						}))
-					}, 4000)
-					return
-				}
+		try {
+			const res = await fetch(`/api/students/${id}/${year}/scores`, {
+				method: 'PUT',
+				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					student_id: id,
+					year: year,
+					sem1: formattedData.sem1,
+					sem2: formattedData.sem2,
+					sem3: formattedData.sem3,
+					comments: data.comments,
+				}),
 			})
-			.catch((error) => {
+			if (res.ok) {
+				setSuccessForm(true)
+				setTimeout(() => {
+					setSuccessForm(false)
+				}, 3000)
+			} else {
+				const data = await res.json()
 				setErrorForm(() => ({
 					flag: true,
-					message: '通信エラーが発生しました。もう一度お試しください。',
+					message: data.message,
 				}))
 				setTimeout(() => {
 					setErrorForm(() => ({
@@ -146,14 +123,27 @@ const Scores = ({params}) => {
 						message: '',
 					}))
 				}, 4000)
-			})
+				return
+			}
+		} catch {
+			setErrorForm(() => ({
+				flag: true,
+				message: '通信エラーが発生しました。もう一度お試しください。',
+			}))
+			setTimeout(() => {
+				setErrorForm(() => ({
+					flag: false,
+					message: '',
+				}))
+			}, 4000)
+		}
 	}
 
 	const handleReport = () => {
 		router.push('./report')
 	}
 
-	if (loading) return <Loading />
+	if (loading || !scores) return <Loading />
 	if (error) return <ErrorFetch message={error} />
 
 	return (
@@ -163,7 +153,7 @@ const Scores = ({params}) => {
 				<h2 className="pageTitle">成績登録</h2>
 				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
 					<nav>
-						<ul className="grid grid-flow-col text-center text-gray-800 bg-gray-100 rounded-lg p-2 mb-5">
+						<ul className="grid grid-flow-col text-center text-gray-700 bg-gray-100 rounded-lg p-2 mb-5">
 							{tabs.map((tab) => (
 								<li
 									key={tab.id}
@@ -189,7 +179,7 @@ const Scores = ({params}) => {
 										</div>
 									</>
 								) : (
-									<TextAreaItem register={register} type="text" id="comments" defaultValues={scores.comments} />
+									<TextAreaItem register={register} type="text" name="comments" />
 								)}
 							</section>
 						))}
@@ -201,10 +191,7 @@ const Scores = ({params}) => {
 						</p>
 					</form>
 					<p>
-						<Link href="/students" className="flex justiry-center items-center">
-							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-							</svg>
+						<Link href="/students" className="ico-back text-sm text-gray-700 flex justiry-center items-center">
 							生徒一覧
 						</Link>
 					</p>

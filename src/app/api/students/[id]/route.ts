@@ -2,8 +2,8 @@ import {supabase} from '@/utils/supabase'
 import {authenticate} from '../../auth'
 
 // GETメソッド: 特定のIDのstudent情報を取得
-export async function GET(req, {params}) {
-	const {user, error} = await authenticate(req)
+export async function GET(req: Request, {params}: {params: {[key: string]: string | string[]}}) {
+	const {error} = await authenticate(req)
 
 	if (error) {
 		return new Response(JSON.stringify({message: error}), {status: 401})
@@ -12,7 +12,6 @@ export async function GET(req, {params}) {
 	const {id} = params
 
 	try {
-		// Supabaseから特定のIDのデータを取得
 		const {data, error} = await supabase.from('students').select('*').eq('id', id).single()
 
 		if (error) {
@@ -20,14 +19,14 @@ export async function GET(req, {params}) {
 		}
 
 		return new Response(JSON.stringify(data), {status: 200})
-	} catch (err) {
+	} catch {
 		return new Response(JSON.stringify({message: 'Internal Server Error'}), {status: 500})
 	}
 }
 
 // PUTメソッド: 特定のIDのstudent情報を更新
-export async function PUT(req, {params}) {
-	const {user, error} = await authenticate(req)
+export async function PUT(req: Request, {params}: {params: {[key: string]: string | string[]}}) {
+	const {error} = await authenticate(req)
 
 	if (error) {
 		return new Response(JSON.stringify({message: error}), {status: 401})
@@ -48,14 +47,14 @@ export async function PUT(req, {params}) {
 		}
 
 		return new Response(JSON.stringify({message: 'Student updated successfully'}), {status: 200})
-	} catch (err) {
+	} catch {
 		return new Response(JSON.stringify({message: 'Internal Server Error'}), {status: 500})
 	}
 }
 
 // DELETEメソッド: 特定のIDのstudent情報を削除
-export async function DELETE(req, {params}) {
-	const {user, error} = await authenticate(req)
+export async function DELETE(req: Request, {params}: {params: {[key: string]: string | string[]}}) {
+	const {error} = await authenticate(req)
 
 	if (error) {
 		return new Response(JSON.stringify({message: error}), {status: 401})
@@ -71,7 +70,7 @@ export async function DELETE(req, {params}) {
 		}
 
 		return new Response(JSON.stringify({message: 'Student deleted successfully'}), {status: 200})
-	} catch (err) {
+	} catch {
 		return new Response(JSON.stringify({message: 'Invalid request'}), {status: 400})
 	}
 }

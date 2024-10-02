@@ -1,7 +1,7 @@
 import {supabase} from '@/utils/supabase'
 import {serialize} from 'cookie'
 
-export async function POST(req) {
+export async function POST(req: Request) {
 	try {
 		const {email, password} = await req.json()
 
@@ -35,7 +35,7 @@ export async function POST(req) {
 				}),
 			},
 		})
-	} catch (err) {
+	} catch {
 		return new Response(JSON.stringify({message: 'Internal Server Error'}), {status: 500})
 	}
 }

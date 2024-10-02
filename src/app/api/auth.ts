@@ -2,7 +2,7 @@ import {supabase} from '@/utils/supabase'
 import {parse} from 'cookie'
 
 // 認証関数
-export async function authenticate(req) {
+export async function authenticate(req: Request) {
 	// リクエストヘッダーからクッキーを取得
 	const cookies = parse(req.headers.get('cookie') || '')
 	const token = cookies.supabaseToken
