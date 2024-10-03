@@ -1,15 +1,60 @@
 'use client'
 
 import {Line} from 'react-chartjs-2'
-import {Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend} from 'chart.js'
+import {
+	Chart as ChartJS,
+	CategoryScale,
+	LinearScale,
+	PointElement,
+	LineElement,
+	Title,
+	Tooltip,
+	Legend,
+	ChartTypeRegistry,
+	ChartOptions,
+	CoreScaleOptions,
+	Tick,
+	Scale,
+} from 'chart.js'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
-export const LineChart = (props) => {
-	const scores = props.scores
+type semObj = {
+	mid: {[key: string]: number | null}
+	end: {[key: string]: number | null}
+}
+
+interface Scores {
+	student_id: number
+	year: number
+	sem1: semObj
+	sem2: semObj
+	sem3: semObj
+	comments: string
+	students: {name: string; id: number}
+}
+
+interface ScoresData {
+	[key: string]: semObj
+}
+
+interface ChartData {
+	[key: string]: {
+		[semester: string]: {
+			mid: number | null
+			end: number | null
+		}
+	}
+}
+
+interface Props {
+	scores: Scores
+}
+
+export const LineChart: React.FC<Props> = ({scores}) => {
 	const {sem1, sem2, sem3} = scores
-	const scoresData = {sem1, sem2, sem3}
-	const chartData = {
+	const scoresData: ScoresData = {sem1, sem2, sem3}
+	const chartData: ChartData = {
 		japanese: {},
 		arithmetic: {},
 		english: {},
@@ -19,8 +64,7 @@ export const LineChart = (props) => {
 
 	// 各学期のデータを変換
 	for (const semester in scoresData) {
-		const mid = scoresData[semester].mid
-		const end = scoresData[semester].end
+		const {mid, end} = scoresData[semester]
 
 		chartData.japanese[semester] = {
 			mid: mid.japanese ? Number(mid.japanese) : null,
@@ -43,8 +87,6 @@ export const LineChart = (props) => {
 			end: end.science ? Number(end.science) : null,
 		}
 	}
-
-	console.log(chartData)
 
 	// グラフのデータ生成関数
 	const generateChartData = () => ({
@@ -148,7 +190,7 @@ export const LineChart = (props) => {
 	// カスタムラベル描画プラグイン
 	const customLabelsPlugin = {
 		id: 'customLabels',
-		afterDraw: (chart) => {
+		afterDraw: (chart: ChartJS<keyof ChartTypeRegistry>) => {
 			const {
 				ctx,
 				chartArea: {bottom},
@@ -187,39 +229,38 @@ export const LineChart = (props) => {
 
 			ctx.restore()
 		},
+		// afterDatasetsDraw: (chart) => {
+		// 	const ctx = chart.ctx
 
-		afterDatasetsDraw: (chart) => {
-			const ctx = chart.ctx
+		// 	chart.data.datasets.forEach((dataset, datasetIndex) => {
+		// 		const meta = chart.getDatasetMeta(datasetIndex)
+		// 		meta.data.forEach((point, index) => {
+		// 			const value = dataset.data[index]
 
-			chart.data.datasets.forEach((dataset, datasetIndex) => {
-				const meta = chart.getDatasetMeta(datasetIndex)
-				meta.data.forEach((point, index) => {
-					const value = dataset.data[index]
+		// 			// 値が null の場合は何もしない
+		// 			if (value !== null) {
+		// 				const position = point.tooltipPosition() // ポイントの位置を取得
 
-					// 値が null の場合は何もしない
-					if (value !== null) {
-						const position = point.tooltipPosition() // ポイントの位置を取得
-
-						// テキストのスタイルを設定
-						ctx.save()
-						ctx.font = 'bold 12px Arial'
-						ctx.fillStyle = dataset.borderColor // ポイントの色に合わせる
-						ctx.textAlign = 'center'
-						ctx.fillText(value, position.x - 5, position.y - 10) // ポイントの上に表示
-						ctx.restore()
-					}
-				})
-			})
-		},
+		// 				// テキストのスタイルを設定
+		// 				ctx.save()
+		// 				ctx.font = 'bold 12px Arial'
+		// 				ctx.fillStyle = dataset.borderColor // ポイントの色に合わせる
+		// 				ctx.textAlign = 'center'
+		// 				ctx.fillText(value, position.x - 5, position.y - 10) // ポイントの上に表示
+		// 				ctx.restore()
+		// 			}
+		// 		})
+		// 	})
+		// },
 	}
 
 	// オプション設定
-	const options = {
+	const options: ChartOptions<'line'> = {
 		responsive: true,
 		maintainAspectRatio: false,
 		layout: {
 			padding: {
-				bottom: 100, // グラフの下に余白
+				bottom: 100,
 			},
 		},
 		plugins: {
@@ -235,9 +276,11 @@ export const LineChart = (props) => {
 			x: {
 				offset: true,
 				ticks: {
-					callback: function (value, index) {
-						const label = this.getLabelForValue(index)
-						return label.length === 2 ? label[1] : label
+					callback: function (value: string | number): string {
+						const xScale = this.chart.scales.x
+						const numericValue = typeof value === 'number' ? value : parseFloat(value as string)
+						const label = xScale.getLabelForValue(numericValue)
+						return Array.isArray(label) && label.length === 2 ? label[1] : label
 					},
 				},
 				grid: {
@@ -248,19 +291,24 @@ export const LineChart = (props) => {
 				suggestedMax: 110,
 				beginAtZero: true,
 				ticks: {
-					// 最上部のラベルを非表示にする
-					callback: function (value, index, values) {
-						// 最上部のラベルを非表示にする
-						if (index === values.length - 1) {
+					callback: function (
+						this: Scale<CoreScaleOptions>,
+						tickValue: string | number,
+						index: number,
+						ticks: Tick[],
+					): string | '' {
+						const value = typeof tickValue === 'number' ? tickValue : parseFloat(tickValue as string)
+						if (index === ticks.length - 1) {
 							return '' // 空文字を返す
 						}
-						return value // その他のラベルはそのまま表示
+						return value.toString() // その他のラベルはそのまま表示
 					},
 					stepSize: 10, // 10ごとにラベルを表示
 				},
 			},
 		},
 	}
+
 	return (
 		<div style={{height: '500px'}}>
 			<Line data={generateChartData()} options={options} plugins={[customLabelsPlugin]} />

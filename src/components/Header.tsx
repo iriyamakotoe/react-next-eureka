@@ -8,7 +8,7 @@ import {Plus_Jakarta_Sans} from 'next/font/google'
 import Link from 'next/link'
 
 interface Props {
-	params?: {id: string; year: string | null}
+	params?: {[key: string]: string}
 	name?: string
 }
 

@@ -18,8 +18,6 @@ interface Student {
 	note: string
 }
 
-type FormData = Student
-
 const NewStudent = () => {
 	const [errorForm, setErrorForm] = useState({flag: false, message: ''})
 	const [successForm, setSuccessForm] = useState(false)
@@ -28,11 +26,11 @@ const NewStudent = () => {
 		register,
 		handleSubmit,
 		formState: {errors},
-	} = useForm<FormData>({
+	} = useForm<Student>({
 		mode: 'all',
 	})
 
-	const onSubmit = async (data: FormData) => {
+	const onSubmit = async (data: Student) => {
 		try {
 			const res = await fetch('/api/students', {
 				method: 'POST',
@@ -98,7 +96,7 @@ const NewStudent = () => {
 							suffix="年生"
 						/>
 
-						<TextAreaItem register={register} type="text" name="note" label="メモ" errors={errors.note} />
+						<TextAreaItem register={register} name="note" label="メモ" errors={errors.note} />
 						{errorForm.flag && <ErrorForm message={errorForm.message} />}
 						{successForm && <SuccessForm message="登録しました。" />}
 						<p className="flex justify-center mt-10">

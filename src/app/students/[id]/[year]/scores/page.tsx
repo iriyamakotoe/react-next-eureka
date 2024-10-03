@@ -30,7 +30,6 @@ interface Scores {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	[key: string]: any
 }
-type FormData = Scores
 
 const Scores = ({params}: {params: {[key: string]: string}}) => {
 	const {id, year} = params
@@ -45,12 +44,12 @@ const Scores = ({params}: {params: {[key: string]: string}}) => {
 		{id: 0, title: '一学期', semester: 'sem1'},
 		{id: 1, title: '二学期', semester: 'sem2'},
 		{id: 2, title: '三学期', semester: 'sem3'},
-		{id: 3, title: 'コメント'},
+		{id: 3, title: 'コメント', semester: ''},
 	]
 
-	const {register, handleSubmit} = useForm<FormData>({mode: 'all'})
+	const {register, handleSubmit} = useForm<Scores>({mode: 'all'})
 
-	const onSubmit = async (data: FormData) => {
+	const onSubmit = async (data: Scores) => {
 		const formatData = () => {
 			const sem1 = {
 				end: {},
@@ -81,7 +80,6 @@ const Scores = ({params}: {params: {[key: string]: string}}) => {
 				})
 			}
 
-			// スコアオブジェクトを渡す
 			semScores('sem1', sem1)
 			semScores('sem2', sem2)
 			semScores('sem3', sem3)
@@ -179,7 +177,7 @@ const Scores = ({params}: {params: {[key: string]: string}}) => {
 										</div>
 									</>
 								) : (
-									<TextAreaItem register={register} type="text" name="comments" />
+									<TextAreaItem register={register} name="comments" />
 								)}
 							</section>
 						))}

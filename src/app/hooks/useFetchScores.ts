@@ -1,11 +1,16 @@
 import {useState, useEffect, useCallback} from 'react'
 
+type semObj = {
+	mid: {[key: string]: number}
+	end: {[key: string]: number}
+}
+
 interface Scores {
 	student_id: number
 	year: number
-	sem1: Record<string, Record<string, number>>
-	sem2: Record<string, Record<string, number>>
-	sem3: Record<string, Record<string, number>>
+	sem1: semObj
+	sem2: semObj
+	sem3: semObj
 	comments: string
 	students: {name: string; id: number}
 }

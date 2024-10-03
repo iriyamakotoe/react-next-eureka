@@ -2,15 +2,33 @@
 
 import React from 'react'
 import {InputItem} from '@/components/InputItem'
-import {UseFormRegister} from 'react-hook-form'
+import {UseFormRegister, FieldValues, Path} from 'react-hook-form'
 
-interface Props {
-	register: UseFormRegister<FormData>
-	scores: string
+type semObj = {
+	mid: {[key: string]: number}
+	end: {[key: string]: number}
+}
+
+interface Scores {
+	student_id: number
+	year: number
+	sem1: semObj
+	sem2: semObj
+	sem3: semObj
+	comments: string
+	students: {name: string; id: number}
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	[key: string]: any
+}
+
+interface Props<T extends FieldValues> {
+	register: UseFormRegister<T>
+	scores: Scores
 	semester: string
 }
 
-export const Semester: React.FC<Props> = ({register, scores, semester}) => {
+export const Semester = <T extends FieldValues>({register, scores, semester}: Props<T>) => {
+	console.log(scores)
 	return (
 		<>
 			<dl className="flex items-center justify-around max-w-80 mx-auto mb-5">
@@ -19,20 +37,18 @@ export const Semester: React.FC<Props> = ({register, scores, semester}) => {
 					<InputItem
 						register={register}
 						type="number"
-						name={semester + '_mid_japanese'}
+						name={`${semester}.mid.japanese` as Path<T>}
 						placeholder="中間"
 						suffix="点"
-						defaultValues={scores[semester]?.mid?.japanese}
 					/>
 				</dd>
 				<dd>
 					<InputItem
 						register={register}
 						type="number"
-						name={semester + '_end_japanese'}
+						name={`${semester}_end_japanese` as Path<T>}
 						placeholder="期末"
 						suffix="点"
-						defaultValues={scores[semester]?.end?.japanese}
 					/>
 				</dd>
 			</dl>
@@ -42,20 +58,18 @@ export const Semester: React.FC<Props> = ({register, scores, semester}) => {
 					<InputItem
 						register={register}
 						type="number"
-						name={semester + '_mid_arithmetic'}
+						name={`${semester}_mid_arithmetic` as Path<T>}
 						placeholder="中間"
 						suffix="点"
-						defaultValues={scores[semester]?.mid?.arithmetic}
 					/>
 				</dd>
 				<dd>
 					<InputItem
 						register={register}
 						type="number"
-						name={semester + '_end_arithmetic'}
+						name={`${semester}_end_arithmetic` as Path<T>}
 						placeholder="期末"
 						suffix="点"
-						defaultValues={scores[semester]?.end?.arithmetic}
 					/>
 				</dd>
 			</dl>
@@ -65,20 +79,18 @@ export const Semester: React.FC<Props> = ({register, scores, semester}) => {
 					<InputItem
 						register={register}
 						type="number"
-						name={semester + '_mid_english'}
+						name={`${semester}_mid_english` as Path<T>}
 						placeholder="中間"
 						suffix="点"
-						defaultValues={scores[semester]?.mid?.english}
 					/>
 				</dd>
 				<dd>
 					<InputItem
 						register={register}
 						type="number"
-						name={semester + '_end_english'}
+						name={`${semester}_end_english` as Path<T>}
 						placeholder="期末"
 						suffix="点"
-						defaultValues={scores[semester]?.end?.english}
 					/>
 				</dd>
 			</dl>
@@ -88,20 +100,18 @@ export const Semester: React.FC<Props> = ({register, scores, semester}) => {
 					<InputItem
 						register={register}
 						type="number"
-						name={semester + '_mid_social'}
+						name={`${semester}_mid_social` as Path<T>}
 						placeholder="中間"
 						suffix="点"
-						defaultValues={scores[semester]?.mid?.social}
 					/>
 				</dd>
 				<dd>
 					<InputItem
 						register={register}
 						type="number"
-						name={semester + '_end_social'}
+						name={`${semester}_end_social` as Path<T>}
 						placeholder="期末"
 						suffix="点"
-						defaultValues={scores[semester]?.end?.social}
 					/>
 				</dd>
 			</dl>
@@ -111,20 +121,18 @@ export const Semester: React.FC<Props> = ({register, scores, semester}) => {
 					<InputItem
 						register={register}
 						type="number"
-						name={semester + '_mid_science'}
+						name={`${semester}_mid_science` as Path<T>}
 						placeholder="中間"
 						suffix="点"
-						defaultValues={scores[semester]?.mid?.science}
 					/>
 				</dd>
 				<dd>
 					<InputItem
 						register={register}
 						type="number"
-						name={semester + '_end_science'}
+						name={`${semester}_end_science` as Path<T>}
 						placeholder="期末"
 						suffix="点"
-						defaultValues={scores[semester]?.end?.science}
 					/>
 				</dd>
 			</dl>
