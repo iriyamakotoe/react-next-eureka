@@ -54,7 +54,7 @@ const NewStudent = () => {
 				setSuccessForm(true)
 				setTimeout(() => {
 					setSuccessForm(false)
-				}, 3000)
+				}, 4000)
 			} else {
 				const data = await res.json()
 				setErrorForm(() => ({
