@@ -21,7 +21,7 @@ const Login = () => {
 	const {
 		register,
 		handleSubmit,
-		formState: {errors},
+		formState: {},
 	} = useForm<Login>({mode: 'all'})
 
 	const handleLogin = async (data: Login) => {
@@ -73,8 +73,8 @@ const Login = () => {
 				<h2 className="pageTitle">ログイン</h2>
 				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
 					<form onSubmit={handleSubmit(handleLogin)} noValidate className="loginForm max-w-80 mx-auto">
-						<InputItem register={register} type="email" name="email" errors={errors} placeholder="メールアドレス" />
-						<InputItem register={register} type="password" name="password" errors={errors} placeholder="パスワード" />
+						<InputItem register={register} type="email" name="email" placeholder="メールアドレス" />
+						<InputItem register={register} type="password" name="password" placeholder="パスワード" />
 						{errorForm.flag && <ErrorForm message={errorForm.message} />}
 						<p className="flex justify-center mt-10">
 							<ButtonItem type="submit" text="ログイン" style="primary" />

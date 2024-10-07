@@ -38,8 +38,8 @@ export const TextAreaItem = <T extends FieldValues>({
 						placeholder={placeholder}
 					/>
 				</label>
-				{errors && <p className="text-sm text-red-600 mt-1">{String(errors[name]?.message) || ''}</p>}
 			</p>
+			{errors && <p className="text-sm text-red-600 mt-1">{String(errors?.message) || ''}</p>}
 		</>
 	)
 }

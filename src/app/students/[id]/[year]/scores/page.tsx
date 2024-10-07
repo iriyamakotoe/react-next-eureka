@@ -1,7 +1,7 @@
 'use client'
 
 import useFetchScores from '../../../../hooks/useFetchScores'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useRouter} from 'next/navigation'
 import {useForm} from 'react-hook-form'
 import {Header} from '@/components/Header'
@@ -15,16 +15,17 @@ import {ErrorForm} from '@/components/ErrorForm'
 import {SuccessForm} from '@/components/SuccessForm'
 import Link from 'next/link'
 
-type semObj = {
+type SemObj = {
 	mid: {[key: string]: number}
 	end: {[key: string]: number}
 }
+
 interface Scores {
 	student_id: number
 	year: number
-	sem1: semObj
-	sem2: semObj
-	sem3: semObj
+	sem1: SemObj
+	sem2: SemObj
+	sem3: SemObj
 	comments: string
 	students: {name: string; id: number}
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,7 +48,23 @@ const Scores = ({params}: {params: {[key: string]: string}}) => {
 		{id: 3, title: 'コメント', semester: ''},
 	]
 
-	const {register, handleSubmit} = useForm<Scores>({mode: 'all'})
+	const {register, handleSubmit, reset} = useForm<Scores>({mode: 'all'})
+
+	useEffect(() => {
+		if (scores) {
+			const {sem1, sem2, sem3} = scores
+			const semesters = {sem1, sem2, sem3}
+			const subjects = ['japanese', 'arithmetic', 'english', 'social', 'science']
+			const newValues: Record<string, number | string> = {}
+			;(Object.keys(semesters) as Array<keyof typeof semesters>).forEach((semesterKey) => {
+				subjects.forEach((subject) => {
+					newValues[`${semesterKey}_mid_${subject}`] = semesters[semesterKey].mid[subject]
+					newValues[`${semesterKey}_end_${subject}`] = semesters[semesterKey].end[subject]
+				})
+			})
+			reset(newValues)
+		}
+	}, [scores, reset])
 
 	const onSubmit = async (data: Scores) => {
 		const formatData = () => {
@@ -64,7 +81,7 @@ const Scores = ({params}: {params: {[key: string]: string}}) => {
 				mid: {},
 			}
 
-			const semScores = (prefix: string, semObj: semObj) => {
+			const semScores = (prefix: string, semObj: SemObj) => {
 				Object.keys(data).forEach((key) => {
 					if (key.startsWith(`${prefix}_mid`)) {
 						const subjectName = key.split('_').pop()

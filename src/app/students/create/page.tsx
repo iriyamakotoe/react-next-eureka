@@ -82,7 +82,7 @@ const NewStudent = () => {
 				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
 					<form onSubmit={handleSubmit(onSubmit)} noValidate className="max-w-80 mx-auto">
 						<InputItem register={register} type="text" name="name" label="名前" required={true} errors={errors.name} />
-						<InputItem register={register} type="text" name="school" label="学校" errors={errors.school} />
+						<InputItem register={register} type="text" name="school" label="学校" />
 						<InputItem
 							register={register}
 							type="number"
@@ -95,8 +95,8 @@ const NewStudent = () => {
 							errors={errors.grade}
 							suffix="年生"
 						/>
+						<TextAreaItem register={register} name="note" label="メモ" />
 
-						<TextAreaItem register={register} name="note" label="メモ" errors={errors.note} />
 						{errorForm.flag && <ErrorForm message={errorForm.message} />}
 						{successForm && <SuccessForm message="登録しました。" />}
 						<p className="flex justify-center mt-10">

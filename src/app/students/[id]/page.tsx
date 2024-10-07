@@ -1,7 +1,7 @@
 'use client'
 
 import useFetchStudents from '../../hooks/useFetchStudents'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useRouter} from 'next/navigation'
 import {useForm} from 'react-hook-form'
 import {Header} from '@/components/Header'
@@ -35,8 +35,20 @@ const EditStudent = ({params}: {params: {[key: string]: string}}) => {
 	const {
 		register,
 		handleSubmit,
+		reset,
 		formState: {errors},
 	} = useForm<FormData>({mode: 'all'})
+
+	useEffect(() => {
+		if (students) {
+			reset({
+				name: students.name,
+				school: students.school,
+				grade: students.grade,
+				note: students.note,
+			})
+		}
+	}, [students, reset])
 
 	const onSubmit = async (data: FormData) => {
 		try {
@@ -119,10 +131,8 @@ const EditStudent = ({params}: {params: {[key: string]: string}}) => {
 				<h2 className="pageTitle">生徒情報編集</h2>
 				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
 					<form onSubmit={handleSubmit(onSubmit)} className="max-w-80 mx-auto" noValidate>
-						<InputItem register={register} type="text" name="name" label="名前" required={true} errors={errors} />
-
-						<InputItem register={register} type="text" name="school" label="学校" errors={errors} />
-
+						<InputItem register={register} type="text" name="name" label="名前" required={true} errors={errors.name} />
+						<InputItem register={register} type="text" name="school" label="学校" />
 						<InputItem
 							register={register}
 							type="number"
@@ -132,11 +142,11 @@ const EditStudent = ({params}: {params: {[key: string]: string}}) => {
 								value: /^[1-3]*$/,
 								message: '半角数字(1-3)で入力してください。',
 							}}
-							errors={errors}
+							errors={errors.grade}
 							suffix="年生"
 						/>
+						<TextAreaItem register={register} name="note" label="メモ" />
 
-						<TextAreaItem register={register} name="note" label="メモ" errors={errors} />
 						{errorForm.flag && <ErrorForm message={errorForm.message} />}
 						{successForm && <SuccessForm message="登録しました。" />}
 						<p className="flex justify-center mx-auto mt-10">

@@ -88,13 +88,13 @@ export const Header: React.FC<Props> = ({params, name}) => {
 							<p className="text-blue-800 font-bold my-3">編集中：{name}さん</p>
 							<ul className="pl-4 border-l-2 border-blue-100 text-blue-900">
 								<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
-									<Link href={`/students/${params.id}/${params.year}/scores`} className="block">
+									<Link href={`/students/${params.id}/${params.year ? params.year : 2024}/scores`} className="block">
 										成績登録
 									</Link>
 								</li>
 								<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
 									{' '}
-									<Link href={`/students/${params.id}/${params.year}/report`} className="block">
+									<Link href={`/students/${params.id}/${params.year ? params.year : 2024}/report`} className="block">
 										成績レポート
 									</Link>
 								</li>

@@ -37,7 +37,7 @@ export const Semester = <T extends FieldValues>({register, scores, semester}: Pr
 					<InputItem
 						register={register}
 						type="number"
-						name={`${semester}.mid.japanese` as Path<T>}
+						name={`${semester}_mid_japanese` as Path<T>}
 						placeholder="中間"
 						suffix="点"
 					/>

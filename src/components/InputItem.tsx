@@ -34,7 +34,6 @@ export const InputItem = <T extends FieldValues>({
 		: register(name, {
 				pattern,
 			})
-	console.log(errors)
 	return (
 		<>
 			<p className="mb-5">
@@ -48,7 +47,7 @@ export const InputItem = <T extends FieldValues>({
 					/>
 					{suffix && <span className="suffix text-xs text-gray-700 inline-block mb-1 ml-1 font-medium">{suffix}</span>}
 				</label>
-				{errors && <span className="text-sm text-red-600 mt-1">{String(errors[name]?.message) || ''}</span>}
+				{errors && <span className="text-sm text-red-600 mt-1">{String(errors?.message) || ''}</span>}
 			</p>
 		</>
 	)
