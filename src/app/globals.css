@@ -26,6 +26,14 @@ input[type='number'] {
 	width: auto;
 	width: 5em !important;
 }
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+input[type='number'] {
+	-moz-appearance: textfield;
+}
 :focus-visible {
 	outline: 0;
 	outline-offset: 0;
