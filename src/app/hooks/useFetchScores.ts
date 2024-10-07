@@ -44,7 +44,7 @@ const useFetchScores = (id: string, year: string) => {
 		} finally {
 			setLoading(false)
 		}
-	}, [id, year])
+	}, [id, router, year])
 
 	useEffect(() => {
 		fetchScores()

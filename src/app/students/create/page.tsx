@@ -35,12 +35,7 @@ const NewStudent = () => {
 
 	useEffect(() => {
 		if (students) {
-			reset({
-				name: '',
-				school: '',
-				grade: '',
-				note: '',
-			})
+			reset({})
 		}
 	}, [students, reset])
 

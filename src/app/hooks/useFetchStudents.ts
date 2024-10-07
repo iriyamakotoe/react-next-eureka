@@ -36,7 +36,7 @@ const useFetchStudents = (id: string | null) => {
 		} finally {
 			setLoading(false)
 		}
-	}, [id])
+	}, [id, router])
 
 	useEffect(() => {
 		fetchStudents()
