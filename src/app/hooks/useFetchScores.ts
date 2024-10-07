@@ -1,4 +1,5 @@
 import {useState, useEffect, useCallback} from 'react'
+import {useRouter} from 'next/navigation'
 
 type semObj = {
 	mid: {[key: string]: number}
@@ -19,6 +20,7 @@ const useFetchScores = (id: string, year: string) => {
 	const [scores, setScores] = useState<Scores | null>(null)
 	const [loading, setLoading] = useState(true)
 	const [error, setError] = useState<string | null>(null)
+	const router = useRouter()
 
 	const fetchScores = useCallback(async () => {
 		try {
@@ -26,6 +28,10 @@ const useFetchScores = (id: string, year: string) => {
 				method: 'GET',
 				credentials: 'include',
 			})
+			if (res.status === 401) {
+				router.push('/login')
+				return
+			}
 			if (!res.ok) {
 				throw new Error('データの取得に失敗しました')
 			}

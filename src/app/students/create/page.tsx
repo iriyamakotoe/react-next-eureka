@@ -1,13 +1,16 @@
 'use client'
 
-import {useState} from 'react'
+import useFetchStudents from '../../hooks/useFetchStudents'
+import {useEffect, useState} from 'react'
 import {useForm} from 'react-hook-form'
 import {Header} from '@/components/Header'
 import {Footer} from '@/components/Footer'
+import {Loading} from '@/components/Loading'
 import {InputItem} from '@/components/InputItem'
 import {TextAreaItem} from '@/components/TextAreaItem'
 import {ButtonItem} from '@/components/ButtonItem'
 import {ErrorForm} from '@/components/ErrorForm'
+import {ErrorFetch} from '@/components/ErrorFetch'
 import {SuccessForm} from '@/components/SuccessForm'
 import Link from 'next/link'
 
@@ -19,16 +22,27 @@ interface Student {
 }
 
 const NewStudent = () => {
+	const {students, loading, error} = useFetchStudents(null)
 	const [errorForm, setErrorForm] = useState({flag: false, message: ''})
 	const [successForm, setSuccessForm] = useState(false)
 
 	const {
 		register,
 		handleSubmit,
+		reset,
 		formState: {errors},
-	} = useForm<Student>({
-		mode: 'all',
-	})
+	} = useForm<Student>({mode: 'all'})
+
+	useEffect(() => {
+		if (students) {
+			reset({
+				name: '',
+				school: '',
+				grade: '',
+				note: '',
+			})
+		}
+	}, [students, reset])
 
 	const onSubmit = async (data: Student) => {
 		try {
@@ -73,6 +87,9 @@ const NewStudent = () => {
 			}, 4000)
 		}
 	}
+
+	if (loading || !students) return <Loading />
+	if (error) return <ErrorFetch message={error} />
 
 	return (
 		<>

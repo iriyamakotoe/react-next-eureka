@@ -18,11 +18,7 @@ const Login = () => {
 	const [errorForm, setErrorForm] = useState({flag: false, message: ''})
 	const router = useRouter()
 
-	const {
-		register,
-		handleSubmit,
-		formState: {},
-	} = useForm<Login>({mode: 'all'})
+	const {register, handleSubmit} = useForm<Login>({mode: 'all'})
 
 	const handleLogin = async (data: Login) => {
 		try {
@@ -68,7 +64,7 @@ const Login = () => {
 
 	return (
 		<>
-			<Header />
+			<Header page="login" />
 			<main className="mainWrapper pl-5 pr-5 pb-10">
 				<h2 className="pageTitle">ログイン</h2>
 				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">

@@ -22,8 +22,6 @@ interface Student {
 	note: string
 }
 
-type FormData = Student
-
 const EditStudent = ({params}: {params: {[key: string]: string}}) => {
 	const {id} = params
 	const {students, loading, error} = useFetchStudents(id)
@@ -37,7 +35,7 @@ const EditStudent = ({params}: {params: {[key: string]: string}}) => {
 		handleSubmit,
 		reset,
 		formState: {errors},
-	} = useForm<FormData>({mode: 'all'})
+	} = useForm<Student>({mode: 'all'})
 
 	useEffect(() => {
 		if (students) {
@@ -50,7 +48,7 @@ const EditStudent = ({params}: {params: {[key: string]: string}}) => {
 		}
 	}, [students, reset])
 
-	const onSubmit = async (data: FormData) => {
+	const onSubmit = async (data: Student) => {
 		try {
 			const res = await fetch(`/api/students/${id}`, {
 				method: 'PUT',
