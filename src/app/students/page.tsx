@@ -90,8 +90,8 @@ const Students = () => {
 		<>
 			<Header />
 			<main className="mainWrapper pl-5 pr-5 pb-10">
-				<h2 className="pageTitle">生徒一覧</h2>
-				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
+				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10 sm:pt-8">
+					<h2 className="pageTitle">生徒一覧</h2>
 					<div className="grid grid-flow-col text-center text-gray-500 bg-gray-100 rounded-lg p-3 mb-5">
 						<p className="flex justify-center">
 							<ButtonItem type="button" text="新規生徒登録" onClick={createStudent} style="primary" />

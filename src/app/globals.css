@@ -41,14 +41,15 @@ input[type='number'] {
 }
 h2.pageTitle {
 	font-size: 1.4em;
-	margin-bottom: 0.6em;
-	color: white;
+	margin-bottom: 1em;
+	color: #557ea7;
 	text-align: center;
 	letter-spacing: 1px;
 	letter-spacing: 2.75px;
-	text-shadow: 0 0 35px #557ea7;
+	/* text-shadow: 0 0 35px #557ea7; */
 	background: url(./assets/img/student.svg) top center no-repeat;
 	padding-top: 1.7em;
+	font-weight: 700;
 }
 .ico-back {
 	background: url(./assets/img/ico_back.svg) top left no-repeat;

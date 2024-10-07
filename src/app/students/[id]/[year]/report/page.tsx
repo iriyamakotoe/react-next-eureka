@@ -24,8 +24,8 @@ const Report = ({params}: {params: {[key: string]: string}}) => {
 		<>
 			<Header params={params} name={scores.students.name} />
 			<main className="mainWrapper pl-5 pr-5 pb-10">
-				<h2 className="pageTitle">成績レポート</h2>
-				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
+				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10 sm:pt-8">
+					<h2 className="pageTitle">成績レポート</h2>
 					<h3 className="mb-2 text-lg font-bold tracking-tight">
 						{scores.students.name}さん（{scores.year}年度）
 					</h3>

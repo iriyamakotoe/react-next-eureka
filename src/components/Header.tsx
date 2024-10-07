@@ -48,8 +48,8 @@ export const Header: React.FC<Props> = ({params, name, page}) => {
 
 	return (
 		<>
-			<header className="flex justify-between items-center p-5 pb-1 text-white tracking-wider bg-theme-800">
-				<h1 className={plusJakartaSans.className}>
+			<header className="flex justify-between items-center p-5 pb-3 tracking-wider">
+				<h1 className={`text-white ${plusJakartaSans.className}`}>
 					<a href="/students" className="flex items-center">
 						<span className="mr-1">
 							<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">

@@ -66,8 +66,8 @@ const Login = () => {
 		<>
 			<Header page="login" />
 			<main className="mainWrapper pl-5 pr-5 pb-10">
-				<h2 className="pageTitle">ログイン</h2>
-				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
+				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10 sm:pt-8">
+					<h2 className="pageTitle">ログイン</h2>
 					<form onSubmit={handleSubmit(handleLogin)} noValidate className="loginForm max-w-80 mx-auto">
 						<InputItem register={register} type="email" name="email" placeholder="メールアドレス" />
 						<InputItem register={register} type="password" name="password" placeholder="パスワード" />

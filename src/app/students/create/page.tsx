@@ -90,8 +90,8 @@ const NewStudent = () => {
 		<>
 			<Header />
 			<main className="mainWrapper pl-5 pr-5 pb-10">
-				<h2 className="pageTitle">新規生徒登録</h2>
-				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10">
+				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10 sm:pt-8">
+					<h2 className="pageTitle">新規生徒登録</h2>
 					<form onSubmit={handleSubmit(onSubmit)} noValidate className="max-w-80 mx-auto">
 						<InputItem register={register} type="text" name="name" label="名前" required={true} errors={errors.name} />
 						<InputItem register={register} type="text" name="school" label="学校" />
