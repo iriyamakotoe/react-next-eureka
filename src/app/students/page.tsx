@@ -88,8 +88,8 @@ const Students = () => {
 	return (
 		<>
 			<Header />
-			<main className="mainWrapper pl-5 pr-5 pb-10">
-				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10 sm:pt-8">
+			<main className="mainWrapper px-3 sm:px-5">
+				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full p-5 sm:p-10 sm:pt-8">
 					<h2 className="pageTitle">生徒一覧</h2>
 					<div className="grid grid-flow-col text-center text-gray-500 bg-gray-100 rounded-lg p-3 mb-5">
 						<p className="flex justify-center">
@@ -100,12 +100,12 @@ const Students = () => {
 					{Object.values(students).map((student: Student) => (
 						<section key={student.id}>
 							<div className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5">
-								<div className="p-5">
+								<div className="p-5 pr-3">
 									<div className="flex justify-between">
 										<h3 className="mb-2 text-lg font-bold tracking-tight">{student.name}</h3>
 										<ButtonItem type="button" text="編集" onClick={() => editStudent(student.id)} />
 									</div>
-									<p className="mb-5 text-neutral-500">
+									<p className="mb-5 text-neutral-500 pr-2">
 										{student.school}　{student.grade}年生
 										<br />
 										{student.note}
@@ -116,7 +116,7 @@ const Students = () => {
 											id="year"
 											value={selectedYear}
 											onChange={handleSelect}
-											className="rounded py-1 px-3 mr-3 inline-block focus:ring-blue-500 focus:border-blue-500 text-gray-700"
+											className="rounded py-1.5 px-2 mr-2 inline-block focus:ring-blue-500 focus:border-blue-500 text-gray-700"
 										>
 											<option value="2024">2024</option>
 											<option value="2025">2025</option>

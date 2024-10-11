@@ -48,7 +48,7 @@ export const Header: React.FC<Props> = ({params, name, page}) => {
 
 	return (
 		<>
-			<header className="flex justify-between items-center p-5 pb-3 tracking-wider">
+			<header className="flex justify-between items-center pt-5 px-3 pb-3 sm:p-5 sm:pb-3 tracking-wider">
 				<h1 className={`text-white ${plusJakartaSans.className}`}>
 					<a href="/students" className="flex items-center">
 						<span className="mr-1">

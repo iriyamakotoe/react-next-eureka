@@ -164,8 +164,8 @@ const Scores = ({params}: {params: {[key: string]: string}}) => {
 	return (
 		<>
 			<Header params={params} name={scores.students.name} />
-			<main className="mainWrapper pl-5 pr-5 pb-10">
-				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10 sm:pt-8">
+			<main className="mainWrapper px-3 sm:px-5">
+				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full p-5 sm:p-10 sm:pt-8">
 					<h2 className="pageTitle">成績登録</h2>
 					<nav>
 						<ul className="grid grid-flow-col text-center text-gray-700 bg-gray-100 rounded-lg p-2 mb-5">

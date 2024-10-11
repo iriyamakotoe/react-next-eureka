@@ -23,8 +23,8 @@ const Report = ({params}: {params: {[key: string]: string}}) => {
 	return (
 		<>
 			<Header params={params} name={scores.students.name} />
-			<main className="mainWrapper pl-5 pr-5 pb-10">
-				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5 sm:p-10 sm:pt-8">
+			<main className="mainWrapper px-3 sm:px-5">
+				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full p-5 sm:p-10 sm:pt-8">
 					<h2 className="pageTitle">成績レポート</h2>
 					<h3 className="mb-2 text-lg font-bold tracking-tight">
 						{scores.students.name}さん（{scores.year}年度）
@@ -33,7 +33,7 @@ const Report = ({params}: {params: {[key: string]: string}}) => {
 					<div className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full mb-5 p-5">
 						<p>{scores.comments}</p>
 					</div>
-					<p className="flex justify-center mx-auto mt-10">
+					<p className="flex justify-center mx-auto mt-10 mb-5">
 						<ButtonItem type="submit" text="印刷" onClick={handlePrint} style="primary" />
 					</p>
 					<p>

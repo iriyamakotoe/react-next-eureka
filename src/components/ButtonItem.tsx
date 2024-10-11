@@ -26,7 +26,7 @@ export const ButtonItem: React.FC<Props> = ({type, text, onClick, style}) => {
 			break
 		default:
 			buttonStyle =
-				'py-1.5 px-4 transition-colors bg-gray-50 border active:bg-gray-200 font-medium border-gray-200 text-gray-900 rounded-lg hover:bg-gray-100 disabled:opacity-50'
+				'py-1.5 px-4 transition-colors bg-gray-50 border active:bg-gray-200 font-medium text-sm border-gray-200 text-gray-900 rounded-lg hover:bg-gray-100 disabled:opacity-50'
 			break
 	}
 
