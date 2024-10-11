@@ -71,7 +71,7 @@ export const Header: React.FC<Props> = ({params, name, page}) => {
 				)}
 			</header>
 			{isOpenMenu && (
-				<nav className="text-sm p-8 rounded-lg bg-white inline-block w-auto absolute right-5 shadow-md">
+				<nav className="p-8 rounded-lg bg-white inline-block w-auto absolute right-5 shadow-md">
 					<ul className="">
 						<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
 							<Link href="/students" className="block">
