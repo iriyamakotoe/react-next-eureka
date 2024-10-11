@@ -62,6 +62,7 @@ const Scores = ({params}: {params: {[key: string]: string}}) => {
 					newValues[`${semesterKey}_end_${subject}`] = semesters[semesterKey].end[subject]
 				})
 			})
+			newValues['comments'] = scores.comments
 			reset(newValues)
 		}
 	}, [scores, reset])
@@ -188,7 +189,7 @@ const Scores = ({params}: {params: {[key: string]: string}}) => {
 							<section key={tab.id} className={`tab-pane ${activeTab === tab.id ? 'block' : 'hidden'} scoresForm `}>
 								{tab.id !== 3 ? (
 									<>
-										<p className="text-right text-xs mb-2">※成績は半角数字で記入してください</p>
+										<p className="text-right text-xs mb-2">※成績は半角数字</p>
 										<div className="max-w-80 mx-auto">
 											<Semester semester={tab.semester} register={register} scores={scores} />
 										</div>
