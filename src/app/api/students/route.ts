@@ -68,8 +68,7 @@ export async function POST(req: Request) {
 			console.error('Error inserting into scores table:', scoreError)
 
 			await supabase.from('students').delete().eq('id', studentId)
-
-			return {success: false, message: 'Error inserting score, rolled back student.'}
+			return new Response(JSON.stringify({message: 'スコアの登録中にエラーが発生しました。'}), {status: 500})
 		}
 
 		return new Response(JSON.stringify({message: 'Student added successfully'}), {status: 200})
