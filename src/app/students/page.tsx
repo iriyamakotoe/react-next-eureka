@@ -20,7 +20,6 @@ interface Student {
 
 const Students = () => {
 	const {students, loading, error} = useFetchStudents(null)
-
 	const [selectedYear, setSelectedYear] = useState(2024)
 	const [errorForm, setErrorForm] = useState({flag: false, message: ''})
 	const router = useRouter()
@@ -37,19 +36,19 @@ const Students = () => {
 		setSelectedYear(Number(e.target.value))
 	}
 
-	const fetchScore = async (id: number | string, year: number) => {
+	const handleScore = async (id: number | string, year: number, page: string) => {
 		const res = await fetch(`/api/students/${id}/${year}/scores`, {
 			method: 'GET',
 			credentials: 'include',
 		})
 		if (res.ok) {
-			router.push(`/students/${id}/${year}/scores`)
+			router.push(`/students/${id}/${year}/${page}`)
 		} else {
-			createScore(id, year)
+			createScore(id, year, page)
 		}
 	}
 
-	const createScore = async (id: number | string, year: number) => {
+	const createScore = async (id: number | string, year: number, page: string) => {
 		const res = await fetch(`/api/students/${id}/${year}/scores`, {
 			method: 'POST',
 			credentials: 'include',
@@ -66,7 +65,7 @@ const Students = () => {
 			}),
 		})
 		if (res.ok) {
-			router.push(`/students/${id}/${year}/scores`)
+			router.push(`/students/${id}/${year}/${page}`)
 		} else {
 			const data = await res.json()
 			setErrorForm(() => ({
@@ -120,8 +119,10 @@ const Students = () => {
 											className="rounded py-1 px-3 mr-3 inline-block focus:ring-blue-500 focus:border-blue-500 text-gray-700"
 										>
 											<option value="2024">2024</option>
+											<option value="2025">2025</option>
 										</select>
-										<ButtonItem type="button" text="成績登録" onClick={() => fetchScore(student.id, selectedYear)} />
+										<ButtonItem type="button" text="成績登録" onClick={() => handleScore(student.id, selectedYear, 'scores')} />
+										<ButtonItem type="button" text="レポート" onClick={() => handleScore(student.id, selectedYear, 'report')} />
 									</p>
 									{errorForm.flag && <ErrorForm message={errorForm.message} />}
 								</div>

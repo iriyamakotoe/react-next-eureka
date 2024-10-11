@@ -28,16 +28,17 @@ export const TextAreaItem = <T extends FieldValues>({
 	return (
 		<>
 			<p className="mb-5">
-				<label className="text-sm text-gray-700 block mb-1 font-medium">
-					{label}
-					<textarea
-						rows={5}
-						cols={33}
-						{...registerOptions}
-						className={`w-full bg-gray-100 rounded border border-gray-200 py-1 px-3 block focus:ring-blue-500 focus:border-blue-500 text-gray-700 ${errors ? 'border-2 border-red-500' : 'border-2 focus:ring-blue-500 focus:border-blue-500'}`}
-						placeholder={placeholder}
-					/>
+				<label htmlFor={name} className="text-sm text-gray-700 block mb-1 font-medium">
+					{label || ''}
 				</label>
+				<textarea
+					rows={5}
+					cols={33}
+					id={name}
+					{...registerOptions}
+					className={`text-base w-full bg-gray-100 rounded border border-gray-200 py-1 px-3 block focus:ring-blue-500 focus:border-blue-500 text-gray-700 ${errors ? 'border-2 border-red-500' : 'border-2 focus:ring-blue-500 focus:border-blue-500'}`}
+					placeholder={placeholder}
+				/>
 			</p>
 			{errors && <p className="text-sm text-red-600 mt-1">{String(errors?.message) || ''}</p>}
 		</>

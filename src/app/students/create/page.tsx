@@ -111,7 +111,7 @@ const NewStudent = () => {
 
 						{errorForm.flag && <ErrorForm message={errorForm.message} />}
 						{successForm && <SuccessForm message="登録しました。" />}
-						<p className="flex justify-center mt-10">
+						<p className="flex justify-center mt-10 mb-5">
 							<ButtonItem type="submit" text="登録" style="primary" />
 						</p>
 					</form>

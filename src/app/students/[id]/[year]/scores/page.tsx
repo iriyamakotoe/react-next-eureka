@@ -200,7 +200,7 @@ const Scores = ({params}: {params: {[key: string]: string}}) => {
 						))}
 						{errorForm.flag && <ErrorForm message={errorForm.message} />}
 						{successForm && <SuccessForm message="登録しました。" />}
-						<p className="flex justify-center mt-10">
+						<p className="flex justify-center mt-10 mb-5">
 							<ButtonItem type="submit" text="保存" style="primary" />
 							<ButtonItem type="button" text="レポート" style="outline" onClick={handleReport} />
 						</p>
