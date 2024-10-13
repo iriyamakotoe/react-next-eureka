@@ -310,7 +310,7 @@ export const LineChart: React.FC<Props> = ({scores}) => {
 	}
 
 	return (
-		<div style={{height: '500px'}}>
+		<div className="linechart">
 			<Line data={generateChartData()} options={options} plugins={[customLabelsPlugin]} />
 		</div>
 	)
