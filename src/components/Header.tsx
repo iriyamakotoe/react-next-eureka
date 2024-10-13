@@ -62,58 +62,61 @@ export const Header: React.FC<Props> = ({params, name, page}) => {
 				</h1>
 				{page != 'login' && (
 					<p>
-						<button onClick={toggleMenu} className="text-white focus:outline-none m-0">
-							<svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-								<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-							</svg>
+						<button onClick={toggleMenu} className="text-white focus:outline-none m-0 p-1">
+							<div className={`btn-trigger ${isOpenMenu && 'active'}`} id="btn03">
+								<span></span>
+								<span></span>
+								<span></span>
+							</div>
 						</button>
 					</p>
 				)}
 			</header>
-			{isOpenMenu && (
-				<nav className="p-8 rounded-lg bg-white inline-block w-auto absolute right-5 shadow-md">
-					<ul className="">
-						<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
-							<Link href="/students" className="block">
-								生徒一覧
-							</Link>
-						</li>
-						<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
-							<Link href="/students/create" className="block">
-								生徒新規登録
-							</Link>
-						</li>
-					</ul>
 
-					{params && (
-						<div>
-							<p className="font-bold my-3">編集中：{name}さん</p>
-							<ul className="pl-4 border-l-2 border-blue-100">
-								<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
-									<Link href={`/students/${params.id}/${params.year ? params.year : 2024}/scores`} className="block">
-										成績登録
-									</Link>
-								</li>
-								<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
-									{' '}
-									<Link href={`/students/${params.id}/${params.year ? params.year : 2024}/report`} className="block">
-										成績レポート
-									</Link>
-								</li>
-								<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
-									{' '}
-									<Link href={`/students/${params.id}`} className="block">
-										生徒情報編集
-									</Link>
-								</li>
-							</ul>
-						</div>
-					)}
-					<p className="flex justify-center mx-auto mt-5">
-						<ButtonItem type="button" text="ログアウト" onClick={handleLogout} />
-					</p>
-				</nav>
-			)}
+			<nav
+				className={`p-8 rounded-lg bg-white inline-block w-auto absolute right-3 sm:right-5 shadow-md transition-opacity duration-500 ${isOpenMenu ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+			>
+				<ul className="">
+					<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
+						<Link href="/students" className="block">
+							生徒一覧
+						</Link>
+					</li>
+					<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
+						<Link href="/students/create" className="block">
+							生徒新規登録
+						</Link>
+					</li>
+				</ul>
+
+				{params && (
+					<div>
+						<p className="font-bold my-3">編集中：{name}さん</p>
+						<ul className="pl-4 border-l-2 border-blue-100">
+							<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
+								<Link href={`/students/${params.id}/${params.year ? params.year : 2024}/scores`} className="block">
+									成績登録
+								</Link>
+							</li>
+							<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
+								{' '}
+								<Link href={`/students/${params.id}/${params.year ? params.year : 2024}/report`} className="block">
+									成績レポート
+								</Link>
+							</li>
+							<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
+								{' '}
+								<Link href={`/students/${params.id}`} className="block">
+									生徒情報編集
+								</Link>
+							</li>
+						</ul>
+					</div>
+				)}
+				<p className="flex justify-center mx-auto mt-5">
+					<ButtonItem type="button" text="ログアウト" onClick={handleLogout} />
+				</p>
+			</nav>
 		</>
 	)
 }
