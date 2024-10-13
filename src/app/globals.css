@@ -131,7 +131,27 @@ h2.pageTitle {
 }
 
 @media print {
-	button {
+	header h1,
+	button,
+	.ico-back {
 		display: none;
+	}
+	header {
+		justify-content: left !important;
+		padding: 0 !important;
+	}
+	header:after {
+		content: 'EUREKA';
+		font-weight: bold;
+		margin-top: 1rem;
+	}
+	h2 {
+		padding-top: 1rem !important;
+	}
+	.mainWrapper,
+	.mainWrapper > section {
+		padding: 0 !important;
+		box-shadow: none !important;
+		border: 0;
 	}
 }
