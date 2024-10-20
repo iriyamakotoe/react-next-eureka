@@ -11,9 +11,12 @@ const config: Config = {
 			colors: {
 				background: 'var(--background)',
 				foreground: 'var(--foreground)',
-				theme: {
+				student: {
 					600: '#a4c1d7',
 					800: '#557EA7',
+				},
+				school: {
+					800: '#a65555',
 				},
 			},
 		},

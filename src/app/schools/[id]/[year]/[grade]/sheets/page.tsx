@@ -1,7 +1,7 @@
 'use client'
 
 import useFetchSheets from '../../../../../hooks/useFetchSheets'
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import {useRouter} from 'next/navigation'
 import {SubmitHandler, useForm} from 'react-hook-form'
 import {Header} from '@/components/Header'
@@ -188,10 +188,10 @@ const Sheets = ({params}: {params: {[key: string]: string}}) => {
 
 	return (
 		<>
-			<Header params={params} name={sheets.schools.name} />
+			<Header page="schools" params={params} name={sheets.schools.name} />
 			<main className="mainWrapper px-3 sm:px-5">
 				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full p-5 sm:p-10 sm:pt-8">
-					<h2 className="pageTitle">答案登録</h2>
+					<h2 className="pageTitle">答案用紙登録</h2>
 					<nav>
 						<ul className="grid grid-flow-col text-center text-gray-700 bg-gray-100 rounded-lg p-2 mb-5">
 							{tabs.map((tab) => (

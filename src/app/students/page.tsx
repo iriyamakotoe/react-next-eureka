@@ -87,7 +87,7 @@ const Students = () => {
 
 	return (
 		<>
-			<Header />
+			<Header page="students" />
 			<main className="mainWrapper px-3 sm:px-5">
 				<section className="rounded-lg overflow-hidden border border-neutral-200/60 bg-white text-neutral-700 shadow-sm w-full p-5 sm:p-10 sm:pt-8">
 					<h2 className="pageTitle">生徒一覧</h2>
