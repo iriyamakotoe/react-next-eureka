@@ -7,7 +7,7 @@ import {useForm} from 'react-hook-form'
 import {Header} from '@/components/Header'
 import {Footer} from '@/components/Footer'
 import {Loading} from '@/components/Loading'
-import {Semester} from '@/components/Semester'
+import {SemScores} from '@/components/SemScores'
 import {TextAreaItem} from '@/components/TextAreaItem'
 import {ButtonItem} from '@/components/ButtonItem'
 import {ErrorFetch} from '@/components/ErrorFetch'
@@ -191,7 +191,7 @@ const Scores = ({params}: {params: {[key: string]: string}}) => {
 									<>
 										<p className="text-right text-xs mb-2">※成績は半角数字</p>
 										<div className="max-w-80 mx-auto">
-											<Semester semester={tab.semester} register={register} scores={scores} />
+											<SemScores semester={tab.semester} register={register} scores={scores} />
 										</div>
 									</>
 								) : (

@@ -27,11 +27,11 @@ interface Props<T extends FieldValues> {
 	semester: string
 }
 
-export const Semester = <T extends FieldValues>({register, scores, semester}: Props<T>) => {
+export const SemScores = <T extends FieldValues>({register, scores, semester}: Props<T>) => {
 	console.log(scores)
 	return (
 		<>
-			<dl className="flex items-center justify-around max-w-80 mx-auto mb-5">
+			<dl className="flex items-center justify-around mb-5">
 				<dt className="font-bold mr-2">国語</dt>
 				<dd>
 					<InputItem
@@ -52,7 +52,7 @@ export const Semester = <T extends FieldValues>({register, scores, semester}: Pr
 					/>
 				</dd>
 			</dl>
-			<dl className="flex items-center justify-around max-w-80 mx-auto mb-5">
+			<dl className="flex items-center justify-around mb-5">
 				<dt className="font-bold mr-2">数学</dt>
 				<dd>
 					<InputItem
@@ -73,7 +73,7 @@ export const Semester = <T extends FieldValues>({register, scores, semester}: Pr
 					/>
 				</dd>
 			</dl>
-			<dl className="flex items-center justify-around max-w-80 mx-auto mb-5">
+			<dl className="flex items-center justify-around mb-5">
 				<dt className="font-bold mr-2">英語</dt>
 				<dd>
 					<InputItem
@@ -94,7 +94,7 @@ export const Semester = <T extends FieldValues>({register, scores, semester}: Pr
 					/>
 				</dd>
 			</dl>
-			<dl className="flex items-center justify-around max-w-80 mx-auto mb-5">
+			<dl className="flex items-center justify-around mb-5">
 				<dt className="font-bold mr-2">社会</dt>
 				<dd>
 					<InputItem
@@ -115,7 +115,7 @@ export const Semester = <T extends FieldValues>({register, scores, semester}: Pr
 					/>
 				</dd>
 			</dl>
-			<dl className="flex items-center justify-around max-w-80 mx-auto mb-5">
+			<dl className="flex items-center justify-around mb-5">
 				<dt className="font-bold mr-2">理科</dt>
 				<dd>
 					<InputItem
@@ -140,4 +140,4 @@ export const Semester = <T extends FieldValues>({register, scores, semester}: Pr
 	)
 }
 
-export default Semester
+export default SemScores
