@@ -52,14 +52,16 @@ export const Header: React.FC<Props> = ({params, name, page}) => {
 				<h1 className={`text-white ${plusJakartaSans.className}`}>
 					<a href={page == 'schools' ? '/schools' : '/students'} className="flex items-center">
 						<span className="mr-1">
-							<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#fff">
+							<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#ffffff">
 								<path d="M167-120q-21 5-36.5-10.5T120-167l40-191 198 198-191 40Zm191-40L160-358l458-458q23-23 57-23t57 23l84 84q23 23 23 57t-23 57L358-160Zm317-600L261-346l85 85 414-414-85-85Z" />
 							</svg>
 						</span>
 						<span className="font-bold">EUREKA</span>
+						{/* {page != 'login' && ( */}
 						<span className="font-bold border-2 border-white text-xs rounded-sm p-1 inline-block leading-none ml-2">
 							{page == 'schools' ? 'SCHOOL' : 'STUDENT'}
 						</span>
+						{/* )} */}
 					</a>
 				</h1>
 				{page != 'login' && (
@@ -80,28 +82,33 @@ export const Header: React.FC<Props> = ({params, name, page}) => {
 					className={`p-8 rounded-lg bg-white inline-block w-auto absolute right-3 sm:right-5 shadow-md transition-opacity duration-500 ${isOpenMenu ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
 				>
 					<ul>
-						<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
-							{page == 'students' ? (
+						{page == 'students' ? (
+							<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
 								<Link href="/students" className="block">
 									生徒一覧
 								</Link>
-							) : (
+							</li>
+						) : (
+							<li className="px-4 py-2 hover:bg-rose-50 rounded-lg">
 								<Link href="/schools" className="block">
 									学校一覧
 								</Link>
-							)}
-						</li>
-						<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
-							{page == 'students' ? (
+							</li>
+						)}
+
+						{page == 'students' ? (
+							<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
 								<Link href="/students/create" className="block">
 									生徒新規登録
 								</Link>
-							) : (
+							</li>
+						) : (
+							<li className="px-4 py-2 hover:bg-rose-50 rounded-lg">
 								<Link href="/schools/create" className="block">
 									学校新規登録
 								</Link>
-							)}
-						</li>
+							</li>
+						)}
 					</ul>
 
 					{params && (
@@ -128,8 +135,8 @@ export const Header: React.FC<Props> = ({params, name, page}) => {
 									</li>
 								</ul>
 							) : (
-								<ul className="pl-4 border-l-2 border-blue-100">
-									<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
+								<ul className="pl-4 border-l-2 border-rose-100">
+									<li className="px-4 py-2 hover:bg-rose-50 rounded-lg">
 										<Link href={`/schools/${params.id}/${params.year ? params.year : 2024}/${params.grade}/sheets`} className="block">
 											答案用紙登録
 										</Link>
@@ -140,7 +147,7 @@ export const Header: React.FC<Props> = ({params, name, page}) => {
 											成績レポート
 										</Link>
 									</li> */}
-									<li className="px-4 py-2 hover:bg-blue-50 rounded-lg">
+									<li className="px-4 py-2 hover:bg-rose-50 rounded-lg">
 										{' '}
 										<Link href={`/schools/${params.id}`} className="block">
 											学校情報編集
@@ -156,7 +163,9 @@ export const Header: React.FC<Props> = ({params, name, page}) => {
 					</p>
 
 					{page == 'students' ? (
-						<p className="bg-rose-900 text-white text-sm text-center px-2 py-1 mx-2 mt-5 leading-none">
+						<p
+							className={`bg-rose-700 hover:bg-rose-800 text-white text-xs text-center py-1 px-2 mt-5 leading-none ${plusJakartaSans.className} font-bold`}
+						>
 							<a href="/schools" className="flex items-center justify-center">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -172,7 +181,9 @@ export const Header: React.FC<Props> = ({params, name, page}) => {
 							</a>
 						</p>
 					) : (
-						<p className="bg-sky-700 text-white text-sm text-center p-2 mx-2 mt-5 leading-none">
+						<p
+							className={`bg-sky-700 hover:bg-sky-800 text-white text-xs text-center p-2 mt-5 leading-none ${plusJakartaSans.className} font-bold`}
+						>
 							<a href="/students" className="flex items-center justify-center">
 								<svg
 									xmlns="http://www.w3.org/2000/svg"

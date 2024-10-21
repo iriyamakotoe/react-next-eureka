@@ -1,32 +1,39 @@
 'use client'
 
-import React from 'react'
-import {UseFormRegister, FieldValues, FieldErrors} from 'react-hook-form'
+import {FieldErrors, UseFormRegisterReturn} from 'react-hook-form'
 
-interface Props<T extends FieldValues> {
-	register: UseFormRegister<T>
+interface Props {
+	register: UseFormRegisterReturn
 	url?: string
 	label?: string
-	errors?: FieldErrors<T>
+	errors?: FieldErrors
 }
 
-export const InputFileItem = <T extends FieldValues>({register, url, label, errors}: Props<T>) => {
+export const InputFileItem = ({register, url, label, errors}: Props) => {
+	console.log(url)
 	return (
 		<>
 			<p className="mb-5">
-				<label className="text-sm text-gray-700 block mb-1 font-medium">
-					{label || ''}
-					{url && (
-						<a href={url} className="max-w-28 mb-2 block">
-							<img src={url} className="h-20" />
+				<label className="text-sm text-gray-700 block mb-1 font-medium">{label || ''}</label>
+				{url && (
+					<span className="flex text-xs items-center mb-2">
+						<a href={url} className="max-w-28 block">
+							<img src={url} alt="" className="h-20 align-bottom" />
 						</a>
-					)}
-					<input
-						type="file"
-						{...register}
-						className={`text-base bg-gray-100 border border-gray-200 rounded py-1 px-3 inline-block text-gray-700 placeholder:text-neutral-500 placeholder:text-xs w-full ${errors ? 'border-2 border-red-500' : 'border-2 focus:ring-blue-500 focus:border-blue-500'}`}
-					/>
-				</label>
+						{/* <span className="inline-block mt-10 pt-5 ml-1">削除</span> */}
+					</span>
+				)}
+				<input
+					type="file"
+					{...register}
+					className={`block w-full text-xs text-slate-500
+					file:mr-1 file:py-2 file:px-4
+					file:rounded-full file:border-0
+					file:text-xm file:font-semibold
+					file:bg-gray-200 file:text-gray-700
+					hover:file:bg-gray-300`}
+				/>
+
 				{errors && <span className="text-sm text-red-600 mt-1">{String(errors?.message) || ''}</span>}
 			</p>
 		</>

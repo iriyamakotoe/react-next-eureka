@@ -14,28 +14,23 @@ import {ErrorForm} from '@/components/ErrorForm'
 import {SuccessForm} from '@/components/SuccessForm'
 import Link from 'next/link'
 
-interface SubjectSheets {
-	japanese: string
-	arithmetic: string
-	english: string
-	social: string
-	science: string
-}
-
 interface Sheets {
 	school_id: number
 	year: number
 	grade: number
-	sem1_mid?: SubjectSheets
-	sem1_end?: SubjectSheets
-	sem2_mid?: SubjectSheets
-	sem2_end?: SubjectSheets
-	sem3_mid?: SubjectSheets
-	sem3_end?: SubjectSheets
 	schools: {
 		name: string
 		id: number
 	}
+}
+type FormData = {
+	[key: string]: File[]
+}
+
+interface Tab {
+	id: number
+	title: string
+	semester: 'sem1' | 'sem2' | 'sem3'
 }
 
 const Sheets = ({params}: {params: {[key: string]: string}}) => {
@@ -46,7 +41,7 @@ const Sheets = ({params}: {params: {[key: string]: string}}) => {
 	const router = useRouter()
 
 	const [activeTab, setActiveTab] = useState(0)
-	const tabs = [
+	const tabs: Tab[] = [
 		{id: 0, title: '一学期', semester: 'sem1'},
 		{id: 1, title: '二学期', semester: 'sem2'},
 		{id: 2, title: '三学期', semester: 'sem3'},
@@ -55,8 +50,8 @@ const Sheets = ({params}: {params: {[key: string]: string}}) => {
 	const {register, handleSubmit} = useForm<FormData>({mode: 'all'})
 
 	const onSubmit: SubmitHandler<FormData> = async (data) => {
-		const urls: {[name: string]: string} = {}
-		const uploadPromises = []
+		const urls: {[key: string]: string} = {}
+		const uploadPromises: Promise<void>[] = []
 		for (const key in data) {
 			const files = data[key]
 			if (files[0]) {
@@ -78,13 +73,13 @@ const Sheets = ({params}: {params: {[key: string]: string}}) => {
 							throw new Error(errorData.message || 'Upload failed')
 						}
 						const responseData = await res.json()
-						urls[key] = responseData.secure_url // URLを保存
+						urls[key] = responseData.secure_url
 					})
 					.catch((error) => {
 						console.error('Error uploading image:', error)
 						throw error
 					})
-				uploadPromises.push(uploadPromise) // Promiseを配列に追加
+				uploadPromises.push(uploadPromise)
 			}
 		}
 
@@ -223,7 +218,7 @@ const Sheets = ({params}: {params: {[key: string]: string}}) => {
 					<form onSubmit={handleSubmit(onSubmit)}>
 						{tabs.map((tab) => (
 							<section key={tab.id} className={`tab-pane ${activeTab === tab.id ? 'block' : 'hidden'} sheetsForm `}>
-								<div className="max-w-2xl mx-auto">
+								<div className="max-w-xl mx-auto">
 									<SemSheets semester={tab.semester} register={register} sheets={sheets} />
 								</div>
 							</section>

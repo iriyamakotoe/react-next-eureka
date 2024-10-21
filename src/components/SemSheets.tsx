@@ -3,33 +3,53 @@
 import {InputFileItem} from '@/components/InputFileItem'
 import {UseFormRegister, FieldValues} from 'react-hook-form'
 
-interface SubjectSheets {
-	japanese: string
-	arithmetic: string
-	english: string
-	social: string
-	science: string
-}
-
 interface Sheets {
 	school_id: number
 	year: number
 	grade: number
-	sem1_mid: SubjectSheets
-	sem1_end: SubjectSheets
+	sem1_mid_japanese?: string
+	sem1_end_japanese?: string
+	sem1_mid_arithmetic?: string
+	sem1_end_arithmetic?: string
+	sem1_mid_english?: string
+	sem1_end_english?: string
+	sem1_mid_social?: string
+	sem1_end_social?: string
+	sem1_mid_science?: string
+	sem1_end_science?: string
+	sem2_mid_japanese?: string
+	sem2_end_japanese?: string
+	sem2_mid_arithmetic?: string
+	sem2_end_arithmetic?: string
+	sem2_mid_english?: string
+	sem2_end_english?: string
+	sem2_mid_social?: string
+	sem2_end_social?: string
+	sem2_mid_science?: string
+	sem2_end_science?: string
+	sem3_mid_japanese?: string
+	sem3_end_japanese?: string
+	sem3_mid_arithmetic?: string
+	sem3_end_arithmetic?: string
+	sem3_mid_english?: string
+	sem3_end_english?: string
+	sem3_mid_social?: string
+	sem3_end_social?: string
+	sem3_mid_science?: string
+	sem3_end_science?: string
 	schools: {
 		name: string
 		id: number
 	}
 }
 
-interface Props<T extends FieldValues> {
-	register: UseFormRegister<T>
+interface Props {
+	register: UseFormRegister<FieldValues>
 	sheets: Sheets
-	semester: string
+	semester: 'sem1' | 'sem2' | 'sem3'
 }
 
-export const SemSheets = <T extends FieldValues>({register, sheets, semester}: Props<T>) => {
+export const SemSheets = ({register, sheets, semester}: Props) => {
 	console.log(sheets)
 	return (
 		<>

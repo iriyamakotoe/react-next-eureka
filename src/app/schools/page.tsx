@@ -17,8 +17,8 @@ interface School {
 
 const Schools = () => {
 	const {schools, loading, error} = useFetchSchools(null)
-	const [selectedYear, setSelectedYear] = useState(2024)
-	const [selectedGrade] = useState(1)
+	const [selectedYear, setSelectedYear] = useState<{[key: number]: string}>({})
+	const [selectedGrade] = useState('1')
 	const [errorForm, setErrorForm] = useState({flag: false, message: ''})
 	const router = useRouter()
 
@@ -30,11 +30,14 @@ const Schools = () => {
 		router.push(`/schools/${id}`)
 	}
 
-	const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setSelectedYear(Number(e.target.value))
+	const handleSelect = (id: number, year: string) => {
+		setSelectedYear((prevYears) => ({
+			...prevYears,
+			[id]: year,
+		}))
 	}
 
-	const handleSheets = async (id: number | string, year: number, grade: number) => {
+	const handleSheets = async (id: number, year: string, grade: string) => {
 		const res = await fetch(`/api/schools/${id}/${year}/${grade}/sheets`, {
 			method: 'GET',
 			credentials: 'include',
@@ -46,7 +49,7 @@ const Schools = () => {
 		}
 	}
 
-	const createSheet = async (id: number | string, year: number, grade: number) => {
+	const createSheet = async (id: number, year: string, grade: string) => {
 		const res = await fetch(`/api/schools/${id}/${year}/${grade}/sheets`, {
 			method: 'POST',
 			credentials: 'include',
@@ -54,7 +57,7 @@ const Schools = () => {
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
-				student_id: id,
+				school_id: id,
 				year: year,
 				grade: grade,
 			}),
@@ -104,14 +107,18 @@ const Schools = () => {
 										<select
 											name="year"
 											id="year"
-											value={selectedYear}
-											onChange={handleSelect}
+											value={selectedYear[school.id] || '2024'}
+											onChange={(e) => handleSelect(school.id, e.target.value)}
 											className="rounded py-1.5 px-2 mr-2 inline-block focus:ring-blue-500 focus:border-blue-500 text-gray-700"
 										>
 											<option value="2024">2024</option>
 											<option value="2025">2025</option>
 										</select>
-										<ButtonItem type="button" text="答案用紙登録" onClick={() => handleSheets(school.id, selectedYear, selectedGrade)} />
+										<ButtonItem
+											type="button"
+											text="答案用紙登録"
+											onClick={() => handleSheets(school.id, selectedYear[school.id] || '2024', selectedGrade)}
+										/>
 									</p>
 									{errorForm.flag && <ErrorForm message={errorForm.message} />}
 								</div>

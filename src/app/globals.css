@@ -40,12 +40,11 @@ input[type='number']::-webkit-inner-spin-button {
 input[type='number'] {
 	-moz-appearance: textfield;
 }
-input[type='file'] {
+/* input[type='file'] {
 	padding: 0 !important;
 	border: 0;
 	background: none;
-	font-size: 0.8rem;
-}
+} */
 :focus-visible {
 	outline: 0;
 	outline-offset: 0;
@@ -67,6 +66,10 @@ h2.pageTitle {
 	letter-spacing: 2.75px;
 	padding-top: 1.7em;
 	font-weight: 700;
+}
+body.category-login h2.pageTitle {
+	color: #64748b;
+	background: url(./assets/img/login.svg) top center no-repeat;
 }
 body.category-students h2.pageTitle {
 	color: rgb(3 105 161 / var(--tw-bg-opacity));

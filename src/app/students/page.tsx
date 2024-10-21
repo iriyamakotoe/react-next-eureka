@@ -20,7 +20,7 @@ interface Student {
 
 const Students = () => {
 	const {students, loading, error} = useFetchStudents(null)
-	const [selectedYear, setSelectedYear] = useState(2024)
+	const [selectedYear, setSelectedYear] = useState<{[key: number]: string}>({})
 	const [errorForm, setErrorForm] = useState({flag: false, message: ''})
 	const router = useRouter()
 
@@ -32,11 +32,14 @@ const Students = () => {
 		router.push(`/students/${id}`)
 	}
 
-	const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		setSelectedYear(Number(e.target.value))
+	const handleSelect = (id: number, year: string) => {
+		setSelectedYear((prevYears) => ({
+			...prevYears,
+			[id]: year,
+		}))
 	}
 
-	const handleScore = async (id: number | string, year: number, page: string) => {
+	const handleScore = async (id: number | string, year: string, page: string) => {
 		const res = await fetch(`/api/students/${id}/${year}/scores`, {
 			method: 'GET',
 			credentials: 'include',
@@ -48,7 +51,7 @@ const Students = () => {
 		}
 	}
 
-	const createScore = async (id: number | string, year: number, page: string) => {
+	const createScore = async (id: number | string, year: string, page: string) => {
 		const res = await fetch(`/api/students/${id}/${year}/scores`, {
 			method: 'POST',
 			credentials: 'include',
@@ -114,15 +117,23 @@ const Students = () => {
 										<select
 											name="year"
 											id="year"
-											value={selectedYear}
-											onChange={handleSelect}
+											value={selectedYear[student.id] || '2024'}
+											onChange={(e) => handleSelect(student.id, e.target.value)}
 											className="rounded py-1.5 px-2 mr-2 inline-block focus:ring-blue-500 focus:border-blue-500 text-gray-700"
 										>
 											<option value="2024">2024</option>
 											<option value="2025">2025</option>
 										</select>
-										<ButtonItem type="button" text="成績登録" onClick={() => handleScore(student.id, selectedYear, 'scores')} />
-										<ButtonItem type="button" text="レポート" onClick={() => handleScore(student.id, selectedYear, 'report')} />
+										<ButtonItem
+											type="button"
+											text="成績登録"
+											onClick={() => handleScore(student.id, selectedYear[student.id] || '2024', 'scores')}
+										/>
+										<ButtonItem
+											type="button"
+											text="レポート"
+											onClick={() => handleScore(student.id, selectedYear[student.id] || '2024', 'report')}
+										/>
 									</p>
 									{errorForm.flag && <ErrorForm message={errorForm.message} />}
 								</div>

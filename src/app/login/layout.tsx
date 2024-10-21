@@ -14,14 +14,14 @@ const geistMono = localFont({
 })
 
 export const metadata: Metadata = {
-	title: 'EUREKA SCHOOL APP',
+	title: 'EUREKA APP',
 	description: '',
 }
 
 export default function LoginLayout({children}: {children: React.ReactNode}) {
 	return (
 		<html lang="ja">
-			<body className={`category-students ${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}>
+			<body className={`category-students bg-sky-700 ${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}>
 				{children}
 			</body>
 		</html>

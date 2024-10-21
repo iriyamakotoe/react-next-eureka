@@ -131,7 +131,7 @@ const EditSchool = ({params}: {params: {[key: string]: string}}) => {
 						{successForm && <SuccessForm message="登録しました。" />}
 						<p className="flex justify-center mx-auto mt-10 mb-5">
 							<ButtonItem type="submit" text="保存" style="primary" />
-							<ButtonItem type="button" text="生徒削除" onClick={handleDelete} style="delete" />
+							<ButtonItem type="button" text="学校削除" onClick={handleDelete} style="delete" />
 						</p>
 					</form>
 					<p>

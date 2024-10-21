@@ -33,7 +33,7 @@ export async function POST(req: Request) {
 	const {name} = await req.json()
 
 	try {
-		const {data: schoolData, error: insertError} = await supabase.from('schools').insert([{name}]).select()
+		const {error: insertError} = await supabase.from('schools').insert([{name}]).select()
 
 		if (insertError) {
 			if (insertError.code === '23505') {
@@ -41,29 +41,6 @@ export async function POST(req: Request) {
 			}
 			return new Response(JSON.stringify({message: '登録中にエラーが発生しました。'}), {status: 500})
 		}
-
-		// // 作成した生徒ID
-		// const schoolId = schoolData[0].id
-		// // 年度を算出
-		// const today = new Date()
-		// const year = today.getFullYear()
-		// const month = today.getMonth() + 1
-		// const fiscalYear = month >= 4 ? year : year - 1
-
-		// const {error: scoreError} = await supabase.from('sheets').insert([
-		// 	{
-		// 		school_id: schoolId,
-		// 		year: fiscalYear,
-		// 		grade: null,
-		// 	},
-		// ])
-
-		// if (scoreError) {
-		// 	console.error('Error inserting into scores table:', scoreError)
-
-		// 	await supabase.from('schools').delete().eq('id', schoolId)
-		// 	return new Response(JSON.stringify({message: '答案用紙の登録中にエラーが発生しました。'}), {status: 500})
-		// }
 
 		return new Response(JSON.stringify({message: 'School added successfully'}), {status: 200})
 	} catch {
