@@ -42,70 +42,55 @@ interface Sheets {
 		id: number
 	}
 }
-
 interface Props {
 	register: UseFormRegister<FieldValues>
 	sheets: Sheets
 	semester: 'sem1' | 'sem2' | 'sem3'
+	onAction: (inputName: string) => void
 }
 
-export const SemSheets = ({register, sheets, semester}: Props) => {
-	console.log(sheets)
+export const SemSheets = ({register, sheets, semester, onAction}: Props) => {
+	const subjects = [
+		{key: 'japanese', name: '国語'},
+		{key: 'arithmetic', name: '数学'},
+		{key: 'english', name: '英語'},
+		{key: 'social', name: '社会'},
+		{key: 'science', name: '理科'},
+	]
+	const renderSubjectSection = (subjectKey: string, label: string, type: 'mid' | 'end') => {
+		const key = `${semester}_${type}_${subjectKey}` as keyof Sheets
+		const value = sheets[key]
+
+		const fileUrl: string | undefined = typeof value === 'string' ? value : undefined
+		const inputName = key
+
+		return (
+			<p className="mb-5">
+				<label className="text-sm text-gray-700 mb-1 pl-1 font-medium">{label}</label>
+				{fileUrl && (
+					<span className="flex text-xs items-end mb-2">
+						<a href={fileUrl} className="max-w-32 pl-1">
+							<img src={fileUrl} alt={`${label}`} className="h-32 align-bottom" />
+						</a>
+						<button onClick={() => onAction(inputName)} type="button" className="ml-1">
+							削除
+						</button>
+					</span>
+				)}
+				<InputFileItem register={register(inputName)} />
+			</p>
+		)
+	}
+
 	return (
 		<>
-			<dl className="flex items-center justify-around mb-5">
-				<dt className="font-bold mr-2">国語</dt>
-				<dd>
-					<InputFileItem register={register(`${semester}_mid_japanese`)} url={sheets[`${semester}_mid_japanese`]} label="中間" />
-				</dd>
-				<dd>
-					<InputFileItem register={register(`${semester}_end_japanese`)} url={sheets[`${semester}_end_japanese`]} label="期末" />
-				</dd>
-			</dl>
-			<dl className="flex items-center justify-around mb-5">
-				<dt className="font-bold mr-2">数学</dt>
-				<dd>
-					<InputFileItem
-						register={register(`${semester}_mid_arithmetic`)}
-						url={sheets[`${semester}_mid_arithmetic`]}
-						label="中間"
-					/>
-				</dd>
-				<dd>
-					<InputFileItem
-						register={register(`${semester}_end_arithmetic`)}
-						url={sheets[`${semester}_end_arithmetic`]}
-						label="期末"
-					/>
-				</dd>
-			</dl>
-			<dl className="flex items-center justify-around mb-5">
-				<dt className="font-bold mr-2">英語</dt>
-				<dd>
-					<InputFileItem register={register(`${semester}_mid_english`)} url={sheets[`${semester}_mid_english`]} label="中間" />
-				</dd>
-				<dd>
-					<InputFileItem register={register(`${semester}_end_english`)} url={sheets[`${semester}_end_english`]} label="期末" />
-				</dd>
-			</dl>
-			<dl className="flex items-center justify-around mb-5">
-				<dt className="font-bold mr-2">社会</dt>
-				<dd>
-					<InputFileItem register={register(`${semester}_mid_social`)} url={sheets[`${semester}_mid_social`]} label="中間" />
-				</dd>
-				<dd>
-					<InputFileItem register={register(`${semester}_end_social`)} url={sheets[`${semester}_end_social`]} label="期末" />
-				</dd>
-			</dl>
-			<dl className="flex items-center justify-around mb-5">
-				<dt className="font-bold mr-2">理科</dt>
-				<dd>
-					<InputFileItem register={register(`${semester}_mid_science`)} url={sheets[`${semester}_mid_science`]} label="中間" />
-				</dd>
-				<dd>
-					<InputFileItem register={register(`${semester}_end_science`)} url={sheets[`${semester}_end_science`]} label="期末" />
-				</dd>
-			</dl>
+			{subjects.map((subject, index) => (
+				<dl key={index} className="flex items-center justify-around mb-5">
+					<dt className="font-bold mr-2">{subject.name}</dt>
+					<dd>{renderSubjectSection(subject.key, '中間', 'mid')}</dd>
+					<dd>{renderSubjectSection(subject.key, '期末', 'end')}</dd>
+				</dl>
+			))}
 		</>
 	)
 }

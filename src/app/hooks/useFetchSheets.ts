@@ -59,7 +59,7 @@ const useFetchSheets = (id: string, year: string, grade: string) => {
 		fetchSheets()
 	}, [fetchSheets])
 
-	return {sheets, loading, error}
+	return {sheets, loading, error, refetch: fetchSheets}
 }
 
 export default useFetchSheets

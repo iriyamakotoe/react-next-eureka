@@ -1,7 +1,7 @@
 'use client'
 
 import useFetchSheets from '../../../../../hooks/useFetchSheets'
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {useRouter} from 'next/navigation'
 import {SubmitHandler, useForm} from 'react-hook-form'
 import {Header} from '@/components/Header'
@@ -35,7 +35,7 @@ interface Tab {
 
 const Sheets = ({params}: {params: {[key: string]: string}}) => {
 	const {id, year, grade} = params
-	const {sheets, loading, error} = useFetchSheets(id, year, grade)
+	const {sheets, loading, error, refetch} = useFetchSheets(id, year, grade)
 	const [errorForm, setErrorForm] = useState({flag: false, message: ''})
 	const [successForm, setSuccessForm] = useState(false)
 	const router = useRouter()
@@ -46,6 +46,12 @@ const Sheets = ({params}: {params: {[key: string]: string}}) => {
 		{id: 1, title: '二学期', semester: 'sem2'},
 		{id: 2, title: '三学期', semester: 'sem3'},
 	]
+
+	useEffect(() => {
+		if (sheets) {
+			console.log('画像が更新されました')
+		}
+	}, [sheets])
 
 	const {register, handleSubmit} = useForm<FormData>({mode: 'all'})
 
@@ -99,6 +105,7 @@ const Sheets = ({params}: {params: {[key: string]: string}}) => {
 				setTimeout(() => {
 					setSuccessForm(false)
 				}, 4000)
+				await refetch()
 			} else {
 				const data = await res.json()
 				setErrorForm(() => ({
@@ -177,6 +184,36 @@ const Sheets = ({params}: {params: {[key: string]: string}}) => {
 			return
 		}
 	}
+	const handleDelete = async (inputName: string) => {
+		const confirmDelete = window.confirm('画像を本当に削除しますか？')
+		if (confirmDelete) {
+			const res = await fetch(`/api/schools/${id}/${year}/${grade}/sheets`, {
+				method: 'PUT',
+				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					[inputName]: null,
+				}),
+			})
+			if (res.ok) {
+				await refetch()
+			} else {
+				const data = await res.json()
+				setErrorForm(() => ({
+					flag: true,
+					message: data.message,
+				}))
+				setTimeout(() => {
+					setErrorForm(() => ({
+						flag: false,
+						message: '',
+					}))
+				}, 4000)
+			}
+		}
+	}
 
 	if (loading || !sheets) return <Loading />
 	if (error) return <ErrorFetch message={error} />
@@ -219,7 +256,7 @@ const Sheets = ({params}: {params: {[key: string]: string}}) => {
 						{tabs.map((tab) => (
 							<section key={tab.id} className={`tab-pane ${activeTab === tab.id ? 'block' : 'hidden'} sheetsForm `}>
 								<div className="max-w-xl mx-auto">
-									<SemSheets semester={tab.semester} register={register} sheets={sheets} />
+									<SemSheets semester={tab.semester} register={register} sheets={sheets} onAction={handleDelete} />
 								</div>
 							</section>
 						))}
